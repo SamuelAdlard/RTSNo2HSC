@@ -9,7 +9,7 @@ public class Unit : NetworkBehaviour
     //Leads to owner player object
     public Player player;
     //the id of the player who owns the unit
-    [SyncVar]public int playerId;
+    public int team; //TODO: Make a system that properly handles teams
 
     [Header("Gameplay")]
     //health
@@ -18,6 +18,7 @@ public class Unit : NetworkBehaviour
     public int supplyLevels = 10;
     //navMeshAgent speed
     [SerializeField] private float speed = 5;
+    //True if in the player script's selected list
     public bool selected = false;
     //TODO: Movement type
 
@@ -27,9 +28,10 @@ public class Unit : NetworkBehaviour
     //time it takes to produce the unit in a production building
     public float timeToMake = 10f;
 
-    [Header("Unity GameObject Info")]
+    [Header("Unity Object Info")]
     //navmeshagent
     public NavMeshAgent navMeshAgent;
+    
 
     [Header("Visual")]
     //the visual model of the unit.
@@ -44,10 +46,28 @@ public class Unit : NetworkBehaviour
         navMeshAgent.speed = speed;
     }
 
-    [Command] //Sends a command to the sever to move the unit.
-    public void CmdMove(Vector3 target)
+    //Runs when the player selects the unit
+    public void Selected()
+    {
+        selected = true;
+        //Shows visually the unit is selected
+        selectionIndicator.SetActive(true);
+    }
+
+    //Runs when the player deselects the unit
+    public void Deselected()
+    {
+        selected = false;
+        //Shows visually the units isn't selected 
+        selectionIndicator.SetActive(false);
+    }
+
+    [Command(requiresAuthority = false)]  //Sends a command to the sever to move the unit.
+    public void CmdMove(Vector3 target, int connectionId)
     {
         //TODO: Add something for movement type later
+        //TODO: Validate player information here
+        print("sent command");
         navMeshAgent.SetDestination(target);
     }
 

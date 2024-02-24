@@ -7,7 +7,7 @@ public class RTSNetworkManager : NetworkManager
 {
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
-    
+    public int teamCounter = 0; //TODO: Make a better system for assigning teams
     //Runs when a player joins the server by overriding the OnServerAddPlayer function
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -15,8 +15,13 @@ public class RTSNetworkManager : NetworkManager
         base.OnServerAddPlayer(conn);
         //Finds the correct player object
         Player player = conn.identity.GetComponent<Player>();
+        //Sets the player team
+        player.team = teamCounter;
+        teamCounter++;
         //sets the player id
         player.networkConnectionToClient = conn;
+        //Runs the On load player function
+        player.ClientRpcOnLoad();
         //Adds the player to the players list
         players.Add(player);
         
