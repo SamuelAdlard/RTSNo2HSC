@@ -47,7 +47,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 653fe99a51f076c428d74859e3b8c625
   hasSpawned: 0
 --- !u!114 &7266714162026332931
 MonoBehaviour:
@@ -66,3 +66,15 @@ MonoBehaviour:
   team: 0
   units: []
   selectedUnits: []
+  playerCamera: {fileID: 0}
+  isBuilding: 0
+  ghostBuilding: {fileID: 0}
+  buildings:
+  - {fileID: 3049168725216482261, guid: 71cb022f721e07b47953909f31542542, type: 3}
+  requiredTag: 
+  invalid: {fileID: 2100000, guid: bfa42176f0af838498e4f37193d1c979, type: 2}
+  valid: {fileID: 2100000, guid: 7fe2dcde72975de45a711026018cb9fa, type: 2}
+  BuildingUI: {fileID: 0}
+  buildingDropdown: {fileID: 0}
+  startBuildingButton: {fileID: 0}
+  stopBuildingButton: {fileID: 0}

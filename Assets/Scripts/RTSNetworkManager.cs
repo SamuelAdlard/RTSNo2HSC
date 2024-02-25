@@ -7,7 +7,8 @@ public class RTSNetworkManager : NetworkManager
 {
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
-    public int teamCounter = 0; //TODO: Make a better system for assigning teams
+    
+    public bool[] teams = new bool[4];
     //Runs when a player joins the server by overriding the OnServerAddPlayer function
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -16,8 +17,16 @@ public class RTSNetworkManager : NetworkManager
         //Finds the correct player object
         Player player = conn.identity.GetComponent<Player>();
         //Sets the player team
-        player.team = teamCounter;
-        teamCounter++;
+        for(int i = 0; i < 4; i++)
+        {
+            if (teams[i] == false)
+            {
+                player.team = i;
+                
+                teams[i] = true;
+                break;
+            }
+        }
         //sets the player id
         player.networkConnectionToClient = conn;
         //Runs the On load player function
@@ -36,5 +45,8 @@ public class RTSNetworkManager : NetworkManager
         Player player = conn.identity.GetComponent<Player>();
         //Removes the player from the list
         players.Remove(player);
+        //Frees up space for another player to join the team
+        teams[player.team] = false;
+        
     }
 }

@@ -3,19 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.AI;
-public class Unit : NetworkBehaviour
-{
-    [Header("Team")]
-    //Leads to owner player object
-    public Player player;
-    //the id of the player who owns the unit
-    public int team; //TODO: Make a system that properly handles teams
+using UnityEngine.UI;
 
-    [Header("Gameplay")]
-    //health
-    public int health = 10;
-    //supplies, if these run out there is a penalty
-    public int supplyLevels = 10;
+public class Unit : EntityBase
+{
+    
     //navMeshAgent speed
     [SerializeField] private float speed = 5;
     //True if in the player script's selected list
@@ -28,23 +20,26 @@ public class Unit : NetworkBehaviour
     //time it takes to produce the unit in a production building
     public float timeToMake = 10f;
 
-    [Header("Unity Object Info")]
+    [Header("Navigation Info")]
     //navmeshagent
     public NavMeshAgent navMeshAgent;
-    
 
-    [Header("Visual")]
+    [Header("GameObjects")]
     //the visual model of the unit.
-    public GameObject model;
+    public GameObject prefab;
     //the circle that appears when the unit is selected.
     public GameObject selectionIndicator;
 
+    
     private void Awake()
     {
-
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
+        //makes sure the type of the unit is correct
+        type = 0;
     }
+
+
 
     //Runs when the player selects the unit
     public void Selected()
@@ -67,13 +62,13 @@ public class Unit : NetworkBehaviour
     {
         //TODO: Add something for movement type later
         //TODO: Validate player information here
-        print("sent command");
         navMeshAgent.SetDestination(target);
     }
 
     [Server] //If the speed of the unit needs to be updated, this is the function to call. This should only be called by the server.
     public void ChangeSpeed(float newSpeed)
     {
+        //Updates navmesh speed and the displayed speed
         navMeshAgent.speed = newSpeed;
         speed = newSpeed;
     }
