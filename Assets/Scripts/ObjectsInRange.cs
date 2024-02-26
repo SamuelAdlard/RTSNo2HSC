@@ -6,13 +6,13 @@ using UnityEngine;
 public class ObjectsInRange : MonoBehaviour
 {
     public List<EntityBase> objects = new List<EntityBase>();
-
+    public string lookingForType = "entity";
 
     
     private void OnTriggerEnter(Collider other)
     {
-        print(other.name);
-        if(other.gameObject.GetComponent<EntityBase>() != null)
+        
+        if(other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == "entity")
         {
             objects.Add(other.gameObject.GetComponent<EntityBase>());
         }

@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     //The movement speed of the camera
     public float horizontalSpeed = 4f;
     
-    void FixedUpdate()
+    void Update()
     {
         //Checks if the player is holding right-click
         if (Input.GetMouseButton(1))

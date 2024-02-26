@@ -8,9 +8,10 @@ using Mirror;
 public class BuilderUnit : Unit
 {
     public Building refillPoint;
+    public Building targetBuilding;
+
     
-
-
+    
 
 
 }

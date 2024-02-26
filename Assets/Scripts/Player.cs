@@ -10,6 +10,8 @@ public class Player : NetworkBehaviour
     [Header("Team")]
     //team of the player, synced across all clients
     [SyncVar]public int team;
+    
+    
 
     [Header("Player's Objects")]
     //List of all the units a player has
@@ -37,6 +39,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private string requiredTag;
     //Materials for the ghost object
     public Material invalid, valid;
+
 
     [Header("UI")]
     //The UI building object
@@ -219,9 +222,12 @@ public class Player : NetworkBehaviour
         Physics.Raycast(ray, out hit);
         if (hit.transform.CompareTag(buildings[index].placementTag))
         {
-            GameObject build = Instantiate(buildings[index].prefab, hit.point, Quaternion.identity);
-            build.GetComponent<Building>().team = team;
+            Building newBuilding = buildings[index];
+            newBuilding.team = team;
+            GameObject build = Instantiate(newBuilding.prefab, hit.point, Quaternion.identity);
+            
             NetworkServer.Spawn(build);
+
         }
         
 

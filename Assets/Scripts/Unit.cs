@@ -36,7 +36,6 @@ public class Unit : EntityBase
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
         //makes sure the type of the unit is correct
-        type = 0;
     }
 
 

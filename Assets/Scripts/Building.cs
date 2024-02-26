@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Mirror;
+using UnityEngine;
 public class Building : EntityBase
 {
     
@@ -10,9 +8,12 @@ public class Building : EntityBase
     //price of the unit
     public int price = 100;
     //The amount of work done on the building
-    public int buildWorkAchieved = 0;
+    [SyncVar]public int buildWorkAchieved = 0;
     //If the building has been built successfully
-    public bool functional = false;
+    [SyncVar]public bool functional = false;
+    //Build speed
+    public float buildDelay = 1;
+    float nextBuild = 0;
 
     [Header("Placement")]
     //The tags that the building has to be touching
@@ -25,16 +26,44 @@ public class Building : EntityBase
     public GameObject model;
     //the circle that appears when the building is selected. (MAY NOT BE NEEDED)
     public GameObject selectionIndicator;
+    //Range that detects if a builder is in range
+    public ObjectsInRange builderRange;
 
-    public void Awake()
+
+    [ServerCallback]
+    private void Update()
     {
-        type = 1; //sets the type of the building
+        if (!functional && Time.time > nextBuild)
+        {
+            nextBuild = Time.time + buildDelay;
+            foreach (EntityBase builder in builderRange.objects)
+            {
+                Build(builder.GetComponent<BuilderUnit>());
+            }
+        }
+        else if (functional && builderRange != null)
+        {
+            Destroy(builderRange.gameObject);
+            ClientRpcSetModelTrue();
+        }
+
+        if (buildWorkAchieved >= price) functional = true;
     }
 
-    public void Update()
+
+    [Server]
+    public void Build(BuilderUnit builder)
     {
-        model.GetComponent<MeshRenderer>().material = teamColours[team]; //TODO: Find a better way of doing this
-        
-        
+        if(builder.supplyStores > 0)
+        {
+            builder.supplyStores--;
+            buildWorkAchieved++;
+        }
+    }
+
+    [ClientRpc]
+    private void ClientRpcSetModelTrue()
+    {
+        model.SetActive(true);
     }
 }
