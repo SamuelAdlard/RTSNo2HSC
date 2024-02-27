@@ -35,10 +35,12 @@ public class Building : EntityBase
     {
         if (!functional && Time.time > nextBuild)
         {
+            print("Trying to build");
             nextBuild = Time.time + buildDelay;
             foreach (EntityBase builder in builderRange.objects)
             {
-                Build(builder.GetComponent<BuilderUnit>());
+                print("Building");
+                if(builder.team == team) Build(builder.GetComponent<BuilderUnit>());
             }
         }
         else if (functional && builderRange != null)

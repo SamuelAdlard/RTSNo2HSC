@@ -11,8 +11,8 @@ public class ObjectsInRange : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        
-        if(other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == "entity")
+        print(other.gameObject.name);
+        if(other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
         {
             objects.Add(other.gameObject.GetComponent<EntityBase>());
         }
