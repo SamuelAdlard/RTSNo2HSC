@@ -69,4 +69,14 @@ public class Building : EntityBase
     {
         model.SetActive(true); //makes the model visible for the client
     }
+
+    public virtual void Selected()
+    {
+
+    }
+
+    public virtual void Deselected()
+    {
+
+    }
 }
