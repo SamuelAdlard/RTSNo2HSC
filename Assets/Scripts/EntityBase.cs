@@ -17,12 +17,18 @@ public class EntityBase : NetworkBehaviour
     //health
     public int health = 10;
     //supplies
-    public int supplyStores = 10;
+    [SyncVar]public int supplyStores = 10;
     //The maximum number of supplies the entity can have
     public int maximumCapacity = 10;
 
-    private void Awake()
+    private void Start()
     {
+        StartCoroutine(SetPlayerReference());
+    }
+
+    private IEnumerator SetPlayerReference()
+    {
+        yield return new WaitForSeconds(0.5f);
         Player localPlayer = NetworkClient.localPlayer.GetComponent<Player>();
         if (team == localPlayer.team)
         {

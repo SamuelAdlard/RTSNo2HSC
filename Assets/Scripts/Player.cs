@@ -52,6 +52,14 @@ public class Player : NetworkBehaviour
     public Button startBuildingButton;
     //The button that stops building
     public Button stopBuildingButton;
+    //UI that displays information about troops
+    public GameObject infoPanel;
+    //Text that shows health
+    public TextMeshProUGUI healthText;
+    //Text that shows supply levels
+    public TextMeshProUGUI supplyText;
+
+    
 
     [ClientRpc]
     public void ClientRpcOnLoad() //Runs when the player has joined the server, called by the server
@@ -74,7 +82,12 @@ public class Player : NetworkBehaviour
         startBuildingButton = GameObject.Find("BuildButtonStart").GetComponent<Button>();
         //Sets up listeners for the buttons, so that the following functions will run when the buttons are pressed
         startBuildingButton.onClick.AddListener(() => { BuildButtonPressed(); });
-        
+        //Finds the gameobjects for the UI
+        infoPanel = FindInActiveObjectByName("Info");
+        healthText = FindInActiveObjectByName("HealthText").GetComponent<TextMeshProUGUI>();
+        supplyText = FindInActiveObjectByName("SupplyText").GetComponent<TextMeshProUGUI>();
+
+
     }
 
     
@@ -84,6 +97,7 @@ public class Player : NetworkBehaviour
         if (!isLocalPlayer) return;
         RaycastHit hit = GetRayFromScreen();
         if (hit.transform == null) return;
+        ShowEntityInformation(hit);
         //Checks if the player has clicked 
         if (Input.GetMouseButtonDown(0))
         {
@@ -214,6 +228,38 @@ public class Player : NetworkBehaviour
         }
         
         if (Input.GetMouseButtonDown(0)) CmdPlaceBuilding(buildingDropdown.value, playerCamera.ScreenPointToRay(Input.mousePosition));
+    }
+
+    private void ShowEntityInformation(RaycastHit hit)
+    {
+        EntityBase entity;
+        if(hit.transform.TryGetComponent<EntityBase>(out entity))
+        {
+            infoPanel.gameObject.SetActive(true);
+            healthText.text = $"Health: {entity.health}";
+            supplyText.text = $"Supplies: {entity.supplyStores}/{entity.maximumCapacity}";
+
+        }
+        else
+        {
+            infoPanel.gameObject.SetActive(false);
+        }
+    }
+
+    GameObject FindInActiveObjectByName(string name)
+    {
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].name == name)
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 
     [Command]
