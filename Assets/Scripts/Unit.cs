@@ -35,13 +35,13 @@ public class Unit : EntityBase
     {
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
-        //makes sure the type of the unit is correct
+        
     }
 
 
 
     //Runs when the player selects the unit
-    public void Selected()
+    public virtual void Selected()
     {
         selected = true;
         //Shows visually the unit is selected
@@ -49,7 +49,7 @@ public class Unit : EntityBase
     }
 
     //Runs when the player deselects the unit
-    public void Deselected()
+    public virtual void Deselected()
     {
         selected = false;
         //Shows visually the units isn't selected 

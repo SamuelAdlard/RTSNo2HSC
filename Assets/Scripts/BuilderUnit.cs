@@ -9,9 +9,25 @@ public class BuilderUnit : Unit
 {
     public Building refillPoint;
     public Building targetBuilding;
+    public GameObject builderUI;
 
-    
-    
+    public override void Selected()
+    {
+        base.Selected();
+        player.builders++;
+        builderUI.SetActive(true);
+    }
+
+    public override void Deselected()
+    {
+        base.Deselected();
+        player.builders--;
+        if (player.builders <= 0)
+        {
+            builderUI.SetActive(false);
+        }
+        
+    }
 
 
 }

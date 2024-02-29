@@ -33,28 +33,29 @@ public class Building : EntityBase
     [ServerCallback]
     private void Update()
     {
-        if (!functional && Time.time > nextBuild)
+        if (!functional && Time.time > nextBuild) //Times the building and make sure it only happens once a second
         {
-            print("Trying to build");
-            nextBuild = Time.time + buildDelay;
-            foreach (EntityBase builder in builderRange.objects)
+            
+            nextBuild = Time.time + buildDelay; //sets the time for the next build
+            foreach (EntityBase builder in builderRange.objects) //runs through the list of builders
             {
-                print("Building");
+                //If the builder is on the same team runs the build function
                 if(builder.team == team) Build(builder.GetComponent<BuilderUnit>());
             }
         }
-        else if (functional && builderRange != null)
+        else if (functional && builderRange != null) //If the building if functional destroys the range detector 
         {
+            //destroys the range detector
             Destroy(builderRange.gameObject);
-            ClientRpcSetModelTrue();
+            ClientRpcSetModelTrue(); //Turns on the model for the client
         }
 
-        if (buildWorkAchieved >= price) functional = true;
+        if (buildWorkAchieved >= price) functional = true; //sets the functional variable to true
     }
 
 
     [Server]
-    public void Build(BuilderUnit builder)
+    public void Build(BuilderUnit builder) //adds progress to the building and uses up supplies
     {
         if(builder.supplyStores > 0)
         {
@@ -66,6 +67,6 @@ public class Building : EntityBase
     [ClientRpc]
     private void ClientRpcSetModelTrue()
     {
-        model.SetActive(true);
+        model.SetActive(true); //makes the model visible for the client
     }
 }

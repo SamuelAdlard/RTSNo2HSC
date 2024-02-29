@@ -12,20 +12,20 @@ public class ColourChange : MonoBehaviour
     public void Awake()
     {
         StartCoroutine(Wait());
-        
+        OnTeamChanged();
     }
 
     private void OnTeamChanged()
     {
-        
+        foreach (GameObject gameObject in gameObjectsToChange)
+        {
+            gameObject.GetComponent<MeshRenderer>().material = entity.teamColours[entity.team]; //TODO: Find a better way of doing this
+        }
     }
 
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(0.5f);
-        foreach (GameObject gameObject in gameObjectsToChange)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = entity.teamColours[entity.team]; //TODO: Find a better way of doing this
-        }
+        OnTeamChanged();
     }
 }

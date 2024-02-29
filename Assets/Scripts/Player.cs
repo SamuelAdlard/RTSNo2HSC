@@ -18,6 +18,8 @@ public class Player : NetworkBehaviour
     public List<Unit> units = new List<Unit>();
     //list of all the units the player has selected
     public List<Unit> selectedUnits = new List<Unit>();
+    //number of builders selected
+    public int builders;
 
     [Header("Networking")]
     //The network connection to the player

@@ -20,5 +20,13 @@ public class EntityBase : NetworkBehaviour
     public int supplyStores = 10;
     //The maximum number of supplies the entity can have
     public int maximumCapacity = 10;
-    
+
+    private void Awake()
+    {
+        Player localPlayer = NetworkClient.localPlayer.GetComponent<Player>();
+        if (team == localPlayer.team)
+        {
+            player = localPlayer;
+        }
+    }
 }
