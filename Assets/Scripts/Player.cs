@@ -98,8 +98,9 @@ public class Player : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         RaycastHit hit = GetRayFromScreen();
-        if (hit.transform == null) return;
+       
         ShowEntityInformation(hit);
+        if (hit.transform == null) return;
         //Checks if the player has clicked 
         if (Input.GetMouseButtonDown(0))
         {
@@ -274,7 +275,7 @@ public class Player : NetworkBehaviour
     private void ShowEntityInformation(RaycastHit hit)
     {
         EntityBase entity;
-        if(hit.transform.TryGetComponent<EntityBase>(out entity))
+        if(hit.transform != null && hit.transform.TryGetComponent(out entity))
         {
             infoPanel.gameObject.SetActive(true);
             healthText.text = $"Health: {entity.health}";
@@ -285,6 +286,8 @@ public class Player : NetworkBehaviour
         {
             infoPanel.gameObject.SetActive(false);
         }
+
+        
     }
 
     GameObject FindInActiveObjectByName(string name)

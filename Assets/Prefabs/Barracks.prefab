@@ -213,6 +213,7 @@ MonoBehaviour:
   builderRange: {fileID: 3029533958894089446}
   units:
   - {fileID: 1962653328337454156, guid: a409a6dd19f4aae499fc9b949a3ae71b, type: 3}
+  - {fileID: 1913077486436249050, guid: 9be89a13ab2353a4380a0ea5dd1096fd, type: 3}
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}
@@ -268,6 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objects: []
   lookingForType: builder
+  combatMode: 0
+  team: 0
 --- !u!135 &4127938447070256924
 SphereCollider:
   m_ObjectHideFlags: 0
