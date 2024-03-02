@@ -25,7 +25,7 @@ public class CombatUnit : Unit
     [ServerCallback]
     private void Update()
     {
-        if (!navMeshAgent.isStopped && Time.time > nextLoss)
+        if (navMeshAgent.velocity.magnitude > 0.5f  && Time.time > nextLoss)
         {
             nextLoss = Time.time + lossDelay;
             supplyStores -= lossRateWhenMoving;
@@ -43,9 +43,9 @@ public class CombatUnit : Unit
     private void Attack()
     {
         RaycastHit hit;
-        if(attackArea.objects.Count > 0)
+        if(attackArea.objects.Count > 1)
         {
-            EntityBase targetEntity = attackArea.objects[0];
+            EntityBase targetEntity = attackArea.objects[1];
             foreach (Transform transform in objectsToLook)
             {
                 transform.LookAt(targetEntity.transform.position);
@@ -56,6 +56,7 @@ public class CombatUnit : Unit
                 
                 if(Physics.Raycast(transform.position, transform.forward, out hit, range))
                 {
+                    print(hit.transform.name);
                     EntityBase entityBase;
                     if (hit.transform.TryGetComponent(out entityBase) && entityBase.team != team)
                     {
