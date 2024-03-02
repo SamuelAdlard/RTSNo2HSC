@@ -41,6 +41,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private string requiredTag;
     //Materials for the ghost object
     public Material invalid, valid;
+    //Selected building
+    public Building selectedBuilding;
 
 
     [Header("UI")]
@@ -106,6 +108,13 @@ public class Player : NetworkBehaviour
             
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            //Handles the player input
+            RightClickHandler(hit);
+
+        }
+
         if (isBuilding)
         {
             MoveGhostBuilding(hit);
@@ -141,7 +150,7 @@ public class Player : NetworkBehaviour
         }
         else
         {
-            //TODO: Add logic for buldings later
+            
             //Loops through all the units and tells them to move
             foreach(Unit unit in selectedUnits)
             {
@@ -149,6 +158,38 @@ public class Player : NetworkBehaviour
                 unit.CmdMove(hit.point, connectionToServer.connectionId);
             }
         }
+    }
+
+    [Client]
+    private void RightClickHandler(RaycastHit hit)
+    {
+        Building building;
+        if(hit.transform.TryGetComponent<Building>(out building) && selectedBuilding == null)
+        {
+            if(building.team == team)
+            {
+                SelectBuilding(building);
+            }
+        }
+        else if(selectedBuilding != null)
+        {
+            DeselectBuilding(selectedBuilding);
+        }
+    }
+
+    [Client]
+    private void SelectBuilding(Building building)
+    {
+        selectedBuilding = building;
+        
+        building.Selected();
+    }
+
+    [Client]
+    private void DeselectBuilding(Building building)
+    {
+        selectedBuilding = null;
+        building.Deselected();
     }
 
     [Client] //Selected units are only needed on the client

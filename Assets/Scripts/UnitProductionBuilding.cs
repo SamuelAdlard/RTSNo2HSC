@@ -4,31 +4,39 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Mirror;
-using static UnityEditor.ObjectChangeEventStream;
 
 public class UnitProductionBuilding : Building
 {
     public List<Unit> units = new List<Unit>();
 
-    List<Unit> queue = new List<Unit>();
+    public List<Unit> queue = new List<Unit>();
 
     public GameObject unitProductionUI;
     public TMP_Dropdown unitDropdown;
     public Button createUnit;
+    public string spawnable = "ground";
+    public Transform spawnPointBase;
+    public Transform spawnPointFinder;
+    bool hasSpawnPoint = false;
+    Vector3 spawnPoint;
+    float nextSpawn;
+    bool makingUnits = false;
+   
+
 
     public override void Selected()
     {
         base.Selected();
         if (unitProductionUI == null)
         {
-            unitProductionUI = FindInActiveObjectByName("UnitProductionMenu");
-            createUnit = createUnit.GetComponentInChildren<Button>();
             //Finds the gameobjects for the UI
+            unitProductionUI = FindInActiveObjectByName("UnitProductionMenu");
             unitDropdown = FindInActiveObjectByName("UnitProductionDropdown").GetComponent<TMP_Dropdown>();
             createUnit = FindInActiveObjectByName("MakeUnitButton").GetComponent<Button>();
-            createUnit.onClick.AddListener(() => { CmdAddUnitToQueue(); });
+            createUnit.onClick.AddListener(() => { CmdAddUnitToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
         }
-        player.builders++;
+
+        PopulateDropdown();
         unitProductionUI.SetActive(true);
 
     }
@@ -45,16 +53,71 @@ public class UnitProductionBuilding : Building
     private void PopulateDropdown()
     {
         unitDropdown.ClearOptions();
+        List<string> options = new List<string>();
         foreach (Unit unit in units) 
         {
-            //unitDropdown.AddOptions()
+            options.Add(unit.name);
+        }
+        unitDropdown.AddOptions(options);
+    }
+
+    
+    
+    [Command(requiresAuthority = false)]
+    private void CmdAddUnitToQueue(int index, int team)
+    {
+        if (units[index].price <= supplyStores && functional)
+        {
+            if (!hasSpawnPoint)
+            {
+                FindSpawnPoint();
+            }
+            queue.Add(units[index]);
+            supplyStores -= units[index].price;
+            if (!makingUnits) StartCoroutine(MakeUnits());
         }
     }
 
-    [Command]
-    private void CmdAddUnitToQueue()
+    [Server]
+    private IEnumerator MakeUnits()
     {
+        makingUnits = true;
+        
+        for (int i = 0; i < queue.Count && queue[i] != null; i++ )
+        {
+            
+            yield return new WaitForSeconds(queue[i].timeToMake);
+            Unit newUnit = queue[i];
+            newUnit.team = team;
+            GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
+            
+            
+            NetworkServer.Spawn(unit);
+            
+            
+        }
+        queue.Clear();
+        makingUnits = false;
+    }
 
+    [Server]
+    private void FindSpawnPoint()
+    {
+        RaycastHit hit;
+        for(int i = 0; i < 360; i++)
+        {
+            if (Physics.Raycast(spawnPointFinder.position, Vector3.down, out hit))
+            {
+                if (hit.transform.CompareTag(spawnable))
+                {
+                    hasSpawnPoint = true;
+                    spawnPoint = hit.point;
+                    break;
+                }
+            }
+
+            spawnPointBase.Rotate(0, i, 0);
+        }
     }
 
     //code taken from stackoverflow

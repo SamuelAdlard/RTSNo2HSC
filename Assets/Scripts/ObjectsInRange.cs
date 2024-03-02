@@ -7,12 +7,19 @@ public class ObjectsInRange : MonoBehaviour
 {
     public List<EntityBase> objects = new List<EntityBase>();
     public string lookingForType = "entity";
-
+    public bool combatMode = false;
+    public int team;
     
     private void OnTriggerEnter(Collider other)
     {
-        print(other.gameObject.name);
-        if(other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
+        if (combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().team != team)
+        {
+            objects.Add(other.gameObject.GetComponent<EntityBase>());
+            return;
+        }
+
+
+        if (other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
         {
             objects.Add(other.gameObject.GetComponent<EntityBase>());
         }

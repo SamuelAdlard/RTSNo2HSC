@@ -72,7 +72,7 @@ public class BuilderUnit : Unit
         {
             refillPoint.supplyStores -= maximumCapacity;
             supplyStores = maximumCapacity;
-            navMeshAgent.SetDestination(returnPosition);
+            //navMeshAgent.SetDestination(returnPosition);
         }
     }
 

@@ -26,6 +26,17 @@ public class EntityBase : NetworkBehaviour
         StartCoroutine(SetPlayerReference());
     }
 
+    public bool TakeDamage(int damage)
+    {
+        health -= damage;
+        if(health <= 0)
+        {
+            NetworkServer.Destroy(gameObject);
+            return true;
+        }
+        return false;
+    }
+
     private IEnumerator SetPlayerReference()
     {
         yield return new WaitForSeconds(0.5f);

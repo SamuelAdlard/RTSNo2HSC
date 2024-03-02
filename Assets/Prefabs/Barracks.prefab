@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &68556021642027462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3771050920527804699}
+  m_Layer: 0
+  m_Name: spawPointFinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3771050920527804699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68556021642027462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3829846897819613383}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3768760245385812897
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,8 +44,8 @@ GameObject:
   - component: {fileID: 3512651916884147925}
   - component: {fileID: 3233700931313762841}
   - component: {fileID: 8298069559069502762}
-  - component: {fileID: 3049168725216482261}
   - component: {fileID: 7365475593844669767}
+  - component: {fileID: 4042680468270608917}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -37,6 +68,7 @@ Transform:
   m_Children:
   - {fileID: 2663764525153456358}
   - {fileID: 299297222710157776}
+  - {fileID: 3829846897819613383}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8830838345050272908
@@ -129,40 +161,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 71cb022f721e07b47953909f31542542
   hasSpawned: 0
---- !u!114 &3049168725216482261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3768760245385812897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79168f0fc8bd47a449571591e2859356, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  player: {fileID: 0}
-  team: 0
-  teamColours:
-  - {fileID: 2100000, guid: 31f42d39a8a43d5409e56f80c2e55951, type: 2}
-  - {fileID: 2100000, guid: 4d64b9ae4c2a7294c9cec8273feb8ac5, type: 2}
-  - {fileID: 2100000, guid: 42c40b1647a444f4d85d36d2e2a7911c, type: 2}
-  - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
-  type: 0
-  health: 250
-  supplyStores: 200
-  maximumCapacity: 200
-  price: 10
-  buildWorkAchieved: 0
-  functional: 0
-  buildDelay: 1
-  placementTag: ground
-  prefab: {fileID: 3768760245385812897}
-  model: {fileID: 6112301165254213273}
-  selectionIndicator: {fileID: 0}
-  builderRange: {fileID: 3029533958894089446}
 --- !u!114 &7365475593844669767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,10 +173,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2048984b25ea762409ddb50762b145e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entity: {fileID: 3049168725216482261}
+  entity: {fileID: 4042680468270608917}
   gameObjectsToChange:
   - {fileID: 6112301165254213273}
   - {fileID: 3768760245385812897}
+--- !u!114 &4042680468270608917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3768760245385812897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e59f250e4e26340a7900f923325f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  player: {fileID: 0}
+  team: 0
+  teamColours:
+  - {fileID: 2100000, guid: 31f42d39a8a43d5409e56f80c2e55951, type: 2}
+  - {fileID: 2100000, guid: 4d64b9ae4c2a7294c9cec8273feb8ac5, type: 2}
+  - {fileID: 2100000, guid: 42c40b1647a444f4d85d36d2e2a7911c, type: 2}
+  - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
+  type: building
+  health: 250
+  supplyStores: 200
+  maximumCapacity: 200
+  price: 10
+  buildWorkAchieved: 0
+  functional: 0
+  buildDelay: 1
+  placementTag: ground
+  prefab: {fileID: 3768760245385812897}
+  model: {fileID: 6112301165254213273}
+  selectionIndicator: {fileID: 0}
+  builderRange: {fileID: 3029533958894089446}
+  units:
+  - {fileID: 1962653328337454156, guid: a409a6dd19f4aae499fc9b949a3ae71b, type: 3}
+  queue: []
+  unitProductionUI: {fileID: 0}
+  unitDropdown: {fileID: 0}
+  createUnit: {fileID: 0}
+  spawnable: ground
+  spawnPointBase: {fileID: 3829846897819613383}
+  spawnPointFinder: {fileID: 3771050920527804699}
 --- !u!1 &4919555675805804613
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +316,38 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &5233542196240427700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3829846897819613383}
+  m_Layer: 0
+  m_Name: spawnPointBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3829846897819613383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5233542196240427700}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 0.5, y: 10, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3771050920527804699}
+  m_Father: {fileID: 7378852064656697805}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6112301165254213273
 GameObject:
   m_ObjectHideFlags: 0
