@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,17 +10,19 @@ public class ObjectsInRange : MonoBehaviour
     public string lookingForType = "entity";
     public bool combatMode = false;
     public int team;
-    
+
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().team != team)
         {
+            print(other.gameObject.GetComponent<EntityBase>().team);
             objects.Add(other.gameObject.GetComponent<EntityBase>());
-            return;
+            
         }
 
 
-        if (other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
+        if (!combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
         {
             objects.Add(other.gameObject.GetComponent<EntityBase>());
         }

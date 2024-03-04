@@ -1,4 +1,5 @@
 using Mirror;
+using System.Collections;
 using UnityEngine;
 public class Building : EntityBase
 {
@@ -70,6 +71,16 @@ public class Building : EntityBase
         model.SetActive(true); //makes the model visible for the client
     }
 
+    private void Awake()
+    {
+        StartCoroutine(Wait());
+    }
+
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if(functional) model.SetActive(true);
+    }    
     public virtual void Selected()
     {
 

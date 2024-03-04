@@ -43,9 +43,15 @@ public class CombatUnit : Unit
     private void Attack()
     {
         RaycastHit hit;
-        if(attackArea.objects.Count > 1)
+        if(attackArea.objects.Count > 0)
         {
-            EntityBase targetEntity = attackArea.objects[1];
+            EntityBase targetEntity = attackArea.objects[0];
+            if (targetEntity == null)
+            {
+                attackArea.objects.RemoveAt(0);
+                return;
+            }
+
             foreach (Transform transform in objectsToLook)
             {
                 transform.LookAt(targetEntity.transform.position);
