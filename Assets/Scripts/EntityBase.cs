@@ -15,7 +15,7 @@ public class EntityBase : NetworkBehaviour
     //Whether the entity is a unit or a building
     public string type = "entity";
     //health
-    public int health = 10;
+    [SyncVar]public int health = 10;
     //supplies
     [SyncVar]public int supplyStores = 10;
     //The maximum number of supplies the entity can have

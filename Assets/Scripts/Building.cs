@@ -32,16 +32,18 @@ public class Building : EntityBase
 
 
     [ServerCallback]
-    private void Update()
+    public virtual void Update()
     {
         if (!functional && Time.time > nextBuild) //Times the building and make sure it only happens once a second
         {
-            
+            print("Building 3");
             nextBuild = Time.time + buildDelay; //sets the time for the next build
             foreach (EntityBase builder in builderRange.objects) //runs through the list of builders
             {
+                print("Building 2");
                 //If the builder is on the same team runs the build function
-                if(builder.team == team) Build(builder.GetComponent<BuilderUnit>());
+                if (builder.team == team) Build(builder.GetComponent<BuilderUnit>());
+                
             }
         }
         else if (functional && builderRange != null) //If the building if functional destroys the range detector 
@@ -58,6 +60,7 @@ public class Building : EntityBase
     [Server]
     public void Build(BuilderUnit builder) //adds progress to the building and uses up supplies
     {
+        print("Building 1");
         if(builder.supplyStores > 0)
         {
             builder.supplyStores--;

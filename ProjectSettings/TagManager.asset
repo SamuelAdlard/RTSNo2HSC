@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Unit
   - ground
+  - resources
   layers:
   - Default
   - TransparentFX
