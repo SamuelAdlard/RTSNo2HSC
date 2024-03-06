@@ -381,7 +381,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
   type: builder
   health: 10
-  supplyStores: 20
+  supplyStores: 0
   maximumCapacity: 20
   speed: 5
   selected: 0
@@ -390,7 +390,9 @@ MonoBehaviour:
   navMeshAgent: {fileID: 3693262407983979582}
   prefab: {fileID: 8101234116943866659}
   selectionIndicator: {fileID: 6595699071159134061}
-  refillPoint: {fileID: 0}
+  supplyPoints:
+  - {fileID: 0}
+  - {fileID: 0}
   builderUI: {fileID: 0}
   resupplyDistance: 1
 --- !u!195 &3693262407983979582

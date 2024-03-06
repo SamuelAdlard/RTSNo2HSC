@@ -6,34 +6,35 @@ using UnityEngine.UI;
 
 public class ResourceTransporter : Unit
 {
-    public Building refillPoint;
-    public GameObject builderUI;
+    public List<Transform> supplyPoints = new List<Transform> { null, null };
+
+    public GameObject supplyPointUI;
     public float resupplyDistance = 0.5f;
-    bool findingPickUp = false;
+    bool findingPoint = false;
+    int findingPointType = 0;
     Button pickPickup;
-    Vector3 returnPosition;
+    Button pickDropoff;
+
 
     private void Update()
     {
-        if (findingPickUp)
+        if (findingPoint)
         {
-            FindingPickUp();
+            FindingPoint();
         }
     }
 
     [ServerCallback]
     private void FixedUpdate()
     {
-        if (supplyStores <= 0 && refillPoint != null && !selected)
+        if (supplyStores <= 0 && supplyPoints[0] != null && !selected)
         {
             Resupply();
         }
-
-        if (selected)
+        else if (supplyPoints[1] != null && !selected && supplyStores > 0)
         {
-            returnPosition = transform.position;
+            Dropoff();
         }
-
     }
 
 
@@ -41,14 +42,16 @@ public class ResourceTransporter : Unit
     {
 
         base.Selected();
-        if (builderUI == null)
+        if (supplyPointUI == null)
         {
-            builderUI = FindInActiveObjectByName("BuilderUI");
-            pickPickup = builderUI.GetComponentInChildren<Button>();
-            pickPickup.onClick.AddListener(() => { FindPickUpBuildingPressed(pickPickup); });
+            supplyPointUI = FindInActiveObjectByName("ResourceTransportUI");
+            pickPickup = FindInActiveObjectByName("Pickup").GetComponent<Button>();
+            pickDropoff = FindInActiveObjectByName("Dropoff").GetComponent<Button>();
+            pickPickup.onClick.AddListener(() => { FindPointPressed(0); });
+            pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
         }
         player.builders++;
-        builderUI.SetActive(true);
+        supplyPointUI.SetActive(true);
 
     }
 
@@ -58,7 +61,7 @@ public class ResourceTransporter : Unit
         player.builders--;
         if (player.builders <= 0)
         {
-            builderUI.SetActive(false);
+            supplyPointUI.SetActive(false);
         }
 
     }
@@ -66,45 +69,81 @@ public class ResourceTransporter : Unit
     [Server]
     private void Resupply()
     {
-        navMeshAgent.SetDestination(refillPoint.transform.position);
-        if (Vector3.Distance(transform.position, refillPoint.transform.position) < resupplyDistance)
+        print("resupply");
+        navMeshAgent.SetDestination(supplyPoints[0].transform.position);
+        if (Vector3.Distance(transform.position, supplyPoints[0].transform.position) < resupplyDistance)
         {
-            refillPoint.supplyStores -= maximumCapacity;
-            supplyStores = maximumCapacity;
-            //navMeshAgent.SetDestination(returnPosition);
+            Building building = supplyPoints[0].GetComponent<Building>();
+            if (building.supplyStores < maximumCapacity)
+            {
+                supplyStores = building.supplyStores;
+                building.supplyStores = 0;
+            }
+            else
+            {
+                building.supplyStores -= maximumCapacity;
+                supplyStores = maximumCapacity;
+            }
+           
         }
     }
 
-    private void FindPickUpBuildingPressed(Button pickPickup)
+    private void Dropoff()
     {
-        pickPickup.enabled = false;
-        findingPickUp = true;
-        returnPosition = transform.position;
+        print("dropoff");
+        navMeshAgent.SetDestination(supplyPoints[1].transform.position);
+        if (Vector3.Distance(transform.position, supplyPoints[1].transform.position) < resupplyDistance)
+        {
+            Building building = supplyPoints[1].GetComponent<Building>();
+            if (supplyStores + building.supplyStores > building.maximumCapacity)
+            {
+                building.supplyStores = building.maximumCapacity;
+                supplyStores = 0;
+            }
+            else
+            {
+                building.supplyStores += supplyStores;
+                supplyStores = 0;
+            }
+        }
     }
 
-    private void FindingPickUp()
+    private void FindPointPressed(int type)
+    {
+        if (!selected) return;
+        pickPickup.enabled = false;
+        pickDropoff.enabled = false;
+        findingPoint = true;
+        findingPointType = type;
+    }
+
+
+
+    private void FindingPoint()
     {
         Ray ray = player.playerCamera.ScreenPointToRay(Input.mousePosition); //Creates a ray from the when the mouse is on the screen
         if (Input.GetMouseButtonDown(0))
         {
-            CmdCheckPickup(ray, player.team);
-            findingPickUp = false;
+            CmdCheckPickup(ray, player.team, findingPointType);
+            pickPickup.enabled = true;
+            pickDropoff.enabled = true;
+            findingPoint = false;
         }
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdCheckPickup(Ray ray, int playerTeam) //fix later not secure and could easily be hacked
+    private void CmdCheckPickup(Ray ray, int playerTeam, int findingPointType) //fix later not secure and could easily be hacked
     {
         RaycastHit hit;
         //Casts the ray created
         Physics.Raycast(ray, out hit);
         if (hit.transform.GetComponent<Building>() != null && team == playerTeam)
         {
-            refillPoint = hit.transform.GetComponent<Building>();
+            supplyPoints[findingPointType] = hit.transform;
         }
         else
         {
-            refillPoint = null;
+            supplyPoints[findingPointType] = null;
         }
     }
 

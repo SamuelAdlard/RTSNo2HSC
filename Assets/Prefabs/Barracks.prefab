@@ -200,7 +200,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
   type: building
   health: 250
-  supplyStores: 200
+  supplyStores: 0
   maximumCapacity: 200
   price: 10
   buildWorkAchieved: 0

@@ -72,11 +72,13 @@ public class BuilderUnit : Unit
             supplyPoints[0].GetComponent<Building>().supplyStores -= maximumCapacity;
             supplyStores = maximumCapacity;
             if (supplyPoints[1] != null) navMeshAgent.SetDestination(supplyPoints[1].position);
+            
         }
     }
 
     private void FindPointPressed(int type)
     {
+        if (!selected) return;
         pickPickup.enabled = false;
         pickDropoff.enabled = false;
         findingPoint = true;
