@@ -1,55 +1,55 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Mirror;
 
-public class BuilderUnit : Unit
+public class ResourceTransporter : Unit
 {
-    public List<Transform> supplyPoints = new List<Transform>{null, null};
-    
+    public Building refillPoint;
     public GameObject builderUI;
     public float resupplyDistance = 0.5f;
-    bool findingPoint = false;
-    int findingPointType = 0;
+    bool findingPickUp = false;
     Button pickPickup;
-    Button pickDropoff;
-    
-    
+    Vector3 returnPosition;
+
     private void Update()
     {
-        if (findingPoint)
+        if (findingPickUp)
         {
-            FindingPoint();
+            FindingPickUp();
         }
     }
 
     [ServerCallback]
     private void FixedUpdate()
     {
-        if(supplyStores <= 0 && supplyPoints[0] != null && !selected)
+        if (supplyStores <= 0 && refillPoint != null && !selected)
         {
             Resupply();
         }
+
+        if (selected)
+        {
+            returnPosition = transform.position;
+        }
+
     }
 
 
     public override void Selected()
     {
-        
+
         base.Selected();
         if (builderUI == null)
         {
-            builderUI = FindInActiveObjectByName("ResourceTransportUI");
-            pickPickup = FindInActiveObjectByName("Pickup").GetComponent<Button>();
-            pickDropoff = FindInActiveObjectByName("Dropoff").GetComponent<Button>();
-            pickPickup.onClick.AddListener(() => { FindPointPressed(0); });
-            pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
+            builderUI = FindInActiveObjectByName("BuilderUI");
+            pickPickup = builderUI.GetComponentInChildren<Button>();
+            pickPickup.onClick.AddListener(() => { FindPickUpBuildingPressed(pickPickup); });
         }
         player.builders++;
         builderUI.SetActive(true);
-        
+
     }
 
     public override void Deselected()
@@ -66,53 +66,48 @@ public class BuilderUnit : Unit
     [Server]
     private void Resupply()
     {
-        navMeshAgent.SetDestination(supplyPoints[0].transform.position);
-        if(Vector3.Distance(transform.position, supplyPoints[0].transform.position) < resupplyDistance)
+        navMeshAgent.SetDestination(refillPoint.transform.position);
+        if (Vector3.Distance(transform.position, refillPoint.transform.position) < resupplyDistance)
         {
-            supplyPoints[0].GetComponent<Building>().supplyStores -= maximumCapacity;
+            refillPoint.supplyStores -= maximumCapacity;
             supplyStores = maximumCapacity;
-            if (supplyPoints[1] != null) navMeshAgent.SetDestination(supplyPoints[1].position);
+            //navMeshAgent.SetDestination(returnPosition);
         }
     }
 
-    private void FindPointPressed(int type)
+    private void FindPickUpBuildingPressed(Button pickPickup)
     {
         pickPickup.enabled = false;
-        pickDropoff.enabled = false;
-        findingPoint = true;
-        findingPointType = type;
+        findingPickUp = true;
+        returnPosition = transform.position;
     }
 
-    
-
-    private void FindingPoint()
+    private void FindingPickUp()
     {
         Ray ray = player.playerCamera.ScreenPointToRay(Input.mousePosition); //Creates a ray from the when the mouse is on the screen
         if (Input.GetMouseButtonDown(0))
         {
-            CmdCheckPickup(ray, player.team, findingPointType);
-            pickPickup.enabled = true;
-            pickDropoff.enabled = true;
-            findingPoint = false;
+            CmdCheckPickup(ray, player.team);
+            findingPickUp = false;
         }
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdCheckPickup(Ray ray, int playerTeam, int findingPointType) //fix later not secure and could easily be hacked
+    private void CmdCheckPickup(Ray ray, int playerTeam) //fix later not secure and could easily be hacked
     {
         RaycastHit hit;
         //Casts the ray created
         Physics.Raycast(ray, out hit);
         if (hit.transform.GetComponent<Building>() != null && team == playerTeam)
         {
-            supplyPoints[findingPointType] = hit.transform;
+            refillPoint = hit.transform.GetComponent<Building>();
         }
         else
         {
-            supplyPoints[findingPointType] = null;
+            refillPoint = null;
         }
     }
-    
+
     GameObject FindInActiveObjectByName(string name)
     {
         Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
@@ -128,5 +123,4 @@ public class BuilderUnit : Unit
         }
         return null;
     }
-
 }
