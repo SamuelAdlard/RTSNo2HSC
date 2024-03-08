@@ -74,6 +74,7 @@ MonoBehaviour:
   buildings:
   - {fileID: 4042680468270608917, guid: 71cb022f721e07b47953909f31542542, type: 3}
   - {fileID: 6306665519675774309, guid: 323f2a3770ab2874f8af5414a1cdd8cd, type: 3}
+  - {fileID: 3914545938863789986, guid: 592df0c3d1eefe0429f6b275d9d834c7, type: 3}
   requiredTag: 
   invalid: {fileID: 2100000, guid: bfa42176f0af838498e4f37193d1c979, type: 2}
   valid: {fileID: 2100000, guid: 7fe2dcde72975de45a711026018cb9fa, type: 2}
