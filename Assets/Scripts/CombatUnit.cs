@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using static UnityEngine.GraphicsBuffer;
 
 public class CombatUnit : Unit
 {
@@ -36,12 +37,14 @@ public class CombatUnit : Unit
             nextAttack = attackDelay + Time.time;
             Attack();
         }
-
+        
+        
     }
 
     [Server]
     private void Attack()
     {
+        //print(transform.name + attackArea.objects.Count);
         RaycastHit hit;
         if(attackArea.objects.Count > 0)
         {
@@ -59,10 +62,12 @@ public class CombatUnit : Unit
 
             foreach (Transform turret in turrets)
             {
-                Debug.DrawRay(turret.transform.position, turret.position * 10, Color.blue, 0.5f);
-                if(Physics.Raycast(transform.position, turret.forward, out hit, range))
+                Debug.DrawRay(turret.transform.position, turret.transform.forward * 5, Color.green, 0.1f);
+                
+                if (Physics.Raycast(turret.position, turret.forward, out hit, range))
                 {
-                    print(hit.transform.name);
+                    
+                    print($"{transform.name}: {hit.transform.name}");
                     EntityBase entityBase;
                     if (hit.transform.TryGetComponent(out entityBase) && entityBase.team != team)
                     {
