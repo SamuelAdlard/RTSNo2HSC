@@ -251,7 +251,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   supplyPointUI: {fileID: 0}
-  resupplyDistance: 0.5
+  resupplyDistance: 0.75
 --- !u!195 &2960321786302434096
 NavMeshAgent:
   m_ObjectHideFlags: 0

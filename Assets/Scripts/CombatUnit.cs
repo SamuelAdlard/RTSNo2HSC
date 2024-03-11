@@ -59,8 +59,8 @@ public class CombatUnit : Unit
 
             foreach (Transform turret in turrets)
             {
-                
-                if(Physics.Raycast(transform.position, transform.forward, out hit, range))
+                Debug.DrawRay(turret.transform.position, turret.position * 10, Color.blue, 0.5f);
+                if(Physics.Raycast(transform.position, turret.forward, out hit, range))
                 {
                     print(hit.transform.name);
                     EntityBase entityBase;

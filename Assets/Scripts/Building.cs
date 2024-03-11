@@ -36,11 +36,11 @@ public class Building : EntityBase
     {
         if (!functional && Time.time > nextBuild) //Times the building and make sure it only happens once a second
         {
-            print("Building 3");
+            
             nextBuild = Time.time + buildDelay; //sets the time for the next build
             foreach (EntityBase builder in builderRange.objects) //runs through the list of builders
             {
-                print("Building 2");
+                
                 //If the builder is on the same team runs the build function
                 if (builder.team == team) Build(builder.GetComponent<BuilderUnit>());
                 
@@ -60,7 +60,7 @@ public class Building : EntityBase
     [Server]
     public void Build(BuilderUnit builder) //adds progress to the building and uses up supplies
     {
-        print("Building 1");
+        
         if(builder.supplyStores > 0)
         {
             builder.supplyStores--;

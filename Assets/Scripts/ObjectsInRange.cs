@@ -14,6 +14,7 @@ public class ObjectsInRange : MonoBehaviour
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
+        print(other.name);
         if (combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().team != team)
         {
             print(other.gameObject.GetComponent<EntityBase>().team);
