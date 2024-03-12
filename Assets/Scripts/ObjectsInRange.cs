@@ -9,6 +9,8 @@ public class ObjectsInRange : MonoBehaviour
     public List<EntityBase> objects = new List<EntityBase>();
     public string lookingForType = "entity";
     public bool combatMode = false;
+    public bool selectionMode = false;
+    public bool friendlyMode = false;
     public int team;
 
     [ServerCallback]
@@ -17,13 +19,17 @@ public class ObjectsInRange : MonoBehaviour
         
         if (combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().team != team)
         {
-            print(other.gameObject.GetComponent<EntityBase>().team);
             objects.Add(other.gameObject.GetComponent<EntityBase>());
             
         }
 
 
-        if (!combatMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
+        if (selectionMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().type == lookingForType)
+        {
+            objects.Add(other.gameObject.GetComponent<EntityBase>());
+        }
+
+        if(friendlyMode && other.gameObject.GetComponent<EntityBase>() != null && other.gameObject.GetComponent<EntityBase>().team == team)
         {
             objects.Add(other.gameObject.GetComponent<EntityBase>());
         }

@@ -269,6 +269,8 @@ MonoBehaviour:
   objects: []
   lookingForType: entity
   combatMode: 1
+  selectionMode: 0
+  friendlyMode: 0
   team: 0
 --- !u!1 &4218313259516530601
 GameObject:
@@ -523,11 +525,13 @@ MonoBehaviour:
   maximumCapacity: 100
   speed: 5
   selected: 0
+  size: 2
   price: 100
   timeToMake: 10
   navMeshAgent: {fileID: 1853542211290384082}
   prefab: {fileID: 7244453202466818179}
   selectionIndicator: {fileID: 8012649747573254571}
+  visibleGameObjects: []
   damage: 1
   lossRateWhenMoving: 1
   lossRateWhenFighting: 1

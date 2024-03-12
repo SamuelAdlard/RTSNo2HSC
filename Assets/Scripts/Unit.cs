@@ -12,6 +12,8 @@ public class Unit : EntityBase
     [SerializeField] private float speed = 5;
     //True if in the player script's selected list
     public bool selected = false;
+    //What the unit can fit inside
+    public float size = 1;
     //TODO: Movement type
 
     [Header("Production")]
@@ -29,6 +31,8 @@ public class Unit : EntityBase
     public GameObject prefab;
     //the circle that appears when the unit is selected.
     public GameObject selectionIndicator;
+    //list of visible objects on the gameobject
+    public List<GameObject> visibleGameObjects = new List<GameObject>();
 
     
     private void Awake()
@@ -63,6 +67,16 @@ public class Unit : EntityBase
         //TODO: Validate player information here
         navMeshAgent.SetDestination(target);
     }
+
+    [ClientRpc]
+    public void ClientRpcVisible(bool visible)
+    {
+        foreach(GameObject gameObject in visibleGameObjects)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = visible;
+        }
+    }
+    
 
     [Server] //If the speed of the unit needs to be updated, this is the function to call. This should only be called by the server.
     public void ChangeSpeed(float newSpeed)
