@@ -531,7 +531,12 @@ MonoBehaviour:
   navMeshAgent: {fileID: 1853542211290384082}
   prefab: {fileID: 7244453202466818179}
   selectionIndicator: {fileID: 8012649747573254571}
-  visibleGameObjects: []
+  visibleGameObjects:
+  - {fileID: 1343861879371707983}
+  - {fileID: 6442306868957269056}
+  - {fileID: 420650019727121644}
+  - {fileID: 7978090006500867849}
+  - {fileID: 8012649747573254571}
   damage: 1
   lossRateWhenMoving: 1
   lossRateWhenFighting: 1

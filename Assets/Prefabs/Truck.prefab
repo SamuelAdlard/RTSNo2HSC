@@ -242,11 +242,15 @@ MonoBehaviour:
   maximumCapacity: 10
   speed: 5
   selected: 0
+  size: 1
   price: 100
   timeToMake: 10
   navMeshAgent: {fileID: 2960321786302434096}
   prefab: {fileID: 9112932443032113623}
   selectionIndicator: {fileID: 7192868420511245738}
+  visibleGameObjects:
+  - {fileID: 9112932443032113623}
+  - {fileID: 7192868420511245738}
   supplyPoints:
   - {fileID: 0}
   - {fileID: 0}

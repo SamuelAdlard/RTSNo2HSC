@@ -11,6 +11,8 @@ public class UnitTransporter : Unit
     public List<Unit> garrisonedUnits = new List<Unit>();
     public Transform spawnPointBase;
     public Transform spawnPointFinder;
+    public int maxCount = 5;
+    int count = 0;
     public float maxSize = 1;
     public string spawnableTag = "ground";
     
@@ -58,16 +60,18 @@ public class UnitTransporter : Unit
     [Command(requiresAuthority = false)]
     private void CmdGarrison()
     {
-        garrisoned = true;
+        
         foreach (EntityBase entity in range.objects)
         {
             Unit unitBase;
-            if (entity.TryGetComponent(out unitBase) && unitBase.size <= maxSize)
+            if (entity.TryGetComponent(out unitBase) && unitBase.size <= maxSize && count < maxCount)
             {
+                garrisoned = true;
                 unitBase.gameObject.SetActive(false);
                 unitBase.ClientRpcVisible(false);
                 garrisonedUnits.Add(unitBase);
-                garrisoned = true;
+                count++;
+                
             }
         }
     }
@@ -100,6 +104,7 @@ public class UnitTransporter : Unit
         if (deployed)
         {
             garrisonedUnits.Clear();
+            count = 0;
         }
     }
 
