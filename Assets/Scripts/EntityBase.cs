@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
 public class EntityBase : NetworkBehaviour
 {
     [Header("Team")]
@@ -20,6 +21,8 @@ public class EntityBase : NetworkBehaviour
     [SyncVar]public int supplyStores = 10;
     //The maximum number of supplies the entity can have
     public int maximumCapacity = 10;
+    //The effect that appears when the entity is attacked
+    public ParticleSystem damageEffect;
 
     private void Start()
     {
@@ -30,13 +33,26 @@ public class EntityBase : NetworkBehaviour
     public bool TakeDamage(int damage)
     {
         health -= damage;
-        print(damage);
+        
         if(health <= 0)
         {
             NetworkServer.Destroy(gameObject);
             return true;
         }
+        else
+        {
+            ClientRpcShowEffect();
+        }
         return false;
+    }
+
+    [ClientRpc]
+    private void ClientRpcShowEffect()
+    {
+        if (damageEffect != null)
+        {
+            damageEffect.Play();
+        }
     }
 
     private IEnumerator SetPlayerReference()

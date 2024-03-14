@@ -151,13 +151,36 @@ public class Player : NetworkBehaviour
         }
         else
         {
-            
+            Random.Range(0, 10);
+
+
+
             //Loops through all the units and tells them to move
+            List<int> removeAt = new List<int>();
+
             foreach(Unit unit in selectedUnits)
             {
                 //Sends a command to the server to move the unit
-                unit.CmdMove(hit.point, connectionToServer.connectionId);
+                if(unit != null)
+                {
+                    unit.CmdMove(hit.point, connectionToServer.connectionId);
+                }
+                else
+                {
+                    removeAt.Add(selectedUnits.IndexOf(unit));
+                }
+                
             }
+
+            if(removeAt.Count > 0)
+            {
+                foreach (int index in removeAt)
+                {
+                    units.RemoveAt(index);
+                }
+                removeAt.Clear();
+            }
+
         }
     }
 

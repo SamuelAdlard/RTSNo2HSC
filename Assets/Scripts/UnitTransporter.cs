@@ -67,6 +67,7 @@ public class UnitTransporter : Unit
             if (entity.TryGetComponent(out unitBase) && unitBase.size <= maxSize && count < maxCount)
             {
                 garrisoned = true;
+                range.objects.Remove(entity);
                 unitBase.gameObject.SetActive(false);
                 unitBase.ClientRpcVisible(false);
                 garrisonedUnits.Add(unitBase);
