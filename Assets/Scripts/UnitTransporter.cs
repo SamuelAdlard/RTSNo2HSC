@@ -60,14 +60,14 @@ public class UnitTransporter : Unit
     [Command(requiresAuthority = false)]
     private void CmdGarrison()
     {
-        
+        List<EntityBase> unitsToRemoveFromRange = new List<EntityBase>();
         foreach (EntityBase entity in range.objects)
         {
             Unit unitBase;
             if (entity.TryGetComponent(out unitBase) && unitBase.size <= maxSize && count < maxCount)
             {
                 garrisoned = true;
-                range.objects.Remove(entity);
+                unitsToRemoveFromRange.Add(entity);
                 unitBase.gameObject.SetActive(false);
                 unitBase.ClientRpcVisible(false);
                 garrisonedUnits.Add(unitBase);
@@ -75,12 +75,18 @@ public class UnitTransporter : Unit
                 
             }
         }
+
+        foreach (EntityBase entity in unitsToRemoveFromRange)
+        {
+            range.objects.Remove(entity);
+        }
+        unitsToRemoveFromRange.Clear();
     }
 
     [Command(requiresAuthority = false)]
     private void CmdUngarrison()
     {
-        bool deployed = false;
+        
         if(garrisonedUnits.Count <= 0)
         {
             garrisoned = false;
@@ -102,7 +108,7 @@ public class UnitTransporter : Unit
              garrisoned = false;
         }
 
-        if (deployed)
+        if (!garrisoned)
         {
             garrisonedUnits.Clear();
             count = 0;

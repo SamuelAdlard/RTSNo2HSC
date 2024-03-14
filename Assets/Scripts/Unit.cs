@@ -65,7 +65,11 @@ public class Unit : EntityBase
     {
         //TODO: Add something for movement type later
         //TODO: Validate player information here
-        navMeshAgent.SetDestination(target);
+        if(navMeshAgent.isActiveAndEnabled)
+        {
+            navMeshAgent.SetDestination(target);
+        }
+        
     }
 
     [ClientRpc]

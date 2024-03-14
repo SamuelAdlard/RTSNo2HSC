@@ -116,12 +116,30 @@ public class Player : NetworkBehaviour
 
         }
 
+        if(Input.GetKeyDown(KeyCode.C)) 
+        {
+            DeselectAll();
+        }
+
+
         if (isBuilding)
         {
             MoveGhostBuilding(hit);
             
         }
 
+    }
+
+
+    [Client]
+    private void DeselectAll()
+    {
+        foreach (Unit unit in selectedUnits) 
+        {
+            unit.Deselected();
+        }
+
+        selectedUnits.Clear();
     }
 
     [Client]
@@ -156,32 +174,40 @@ public class Player : NetworkBehaviour
 
 
             //Loops through all the units and tells them to move
-            List<int> removeAt = new List<int>();
+            List<Unit> removeAt = new List<Unit>();
 
             foreach(Unit unit in selectedUnits)
             {
                 //Sends a command to the server to move the unit
                 if(unit != null)
                 {
-                    unit.CmdMove(hit.point, connectionToServer.connectionId);
+                    unit.CmdMove(SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count), connectionToServer.connectionId);
                 }
                 else
                 {
-                    removeAt.Add(selectedUnits.IndexOf(unit));
+                    removeAt.Add(unit);
                 }
                 
             }
 
-            if(removeAt.Count > 0)
+            
+            
+            foreach (Unit unit in removeAt)
             {
-                foreach (int index in removeAt)
-                {
-                    units.RemoveAt(index);
-                }
-                removeAt.Clear();
+                    units.Remove(unit);
             }
+            removeAt.Clear();
+            
 
         }
+    }
+
+    private Vector3 SoldierPosition(Vector3 hitPosition, int index, int selectedCount)
+    {
+        int offsetMagnitude = Mathf.RoundToInt(Mathf.Sqrt(selectedCount));
+        Vector3 offset = new Vector3(offsetMagnitude, 0, offsetMagnitude);
+        Vector3 rawVector = new Vector3(hitPosition.x + index, 0, hitPosition.z - index/offsetMagnitude);
+        return rawVector - offset;
     }
 
     [Client]
