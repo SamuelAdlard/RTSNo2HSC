@@ -57,7 +57,11 @@ public class Unit : EntityBase
     {
         selected = false;
         //Shows visually the units isn't selected 
-        selectionIndicator.SetActive(false);
+        if(selectionIndicator != null)
+        {
+            selectionIndicator.SetActive(false);
+        }
+        
     }
 
     [Command(requiresAuthority = false)]  //Sends a command to the sever to move the unit.

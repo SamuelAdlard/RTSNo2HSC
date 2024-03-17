@@ -204,10 +204,11 @@ public class Player : NetworkBehaviour
 
     private Vector3 SoldierPosition(Vector3 hitPosition, int index, int selectedCount)
     {
+        float spread = 1.5f;
         int offsetMagnitude = Mathf.RoundToInt(Mathf.Sqrt(selectedCount));
-        Vector3 offset = new Vector3(offsetMagnitude, 0, offsetMagnitude);
-        Vector3 rawVector = new Vector3(hitPosition.x + index, 0, hitPosition.z - index/offsetMagnitude);
-        return rawVector - offset;
+        Vector3 offset = new Vector3(-offsetMagnitude / 2, 0, offsetMagnitude / 2);
+        Vector3 rawVector = new Vector3(hitPosition.x + index % offsetMagnitude * spread, 0, hitPosition.z - (index/offsetMagnitude) * spread);
+        return rawVector + offset;
     }
 
     [Client]

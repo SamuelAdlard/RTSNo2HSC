@@ -108,9 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objects: []
-  lookingForType: entity
+  lookingForType: builder
   combatMode: 0
-  selectionMode: 0
+  selectionMode: 1
   friendlyMode: 0
   team: 0
 --- !u!54 &5287976198725660084
@@ -167,12 +167,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4767012742908737298}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 2, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3357652584390092235}
+  m_Father: {fileID: 8007484117873309929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &4388633088190153571
 SphereCollider:
@@ -211,7 +211,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   objects: []
   lookingForType: builder
   combatMode: 0
-  selectionMode: 0
+  selectionMode: 1
   friendlyMode: 0
   team: 0
 --- !u!1 &6039468842600116237
@@ -278,7 +278,6 @@ Transform:
   - {fileID: 4672854145795655862}
   - {fileID: 5862485884947676233}
   - {fileID: 8007484117873309929}
-  - {fileID: 5557012171799030576}
   - {fileID: 8118208065008236701}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -408,7 +407,8 @@ MonoBehaviour:
   selectionIndicator: {fileID: 0}
   builderRange: {fileID: 3538124997464594299}
   units:
-  - {fileID: 8757882729741894270, guid: 506d91220695b9641aacd140845cfce3, type: 3}
+  - {fileID: 8098785369250849770, guid: 10a3d5ac2d9fa7040b790e729fba0597, type: 3}
+  - {fileID: 7494898962527128473, guid: 715ad19e429d72d4d89a3faf14db2730, type: 3}
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}
@@ -462,6 +462,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3035812374887400984}
+  - {fileID: 5557012171799030576}
   m_Father: {fileID: 3357652584390092235}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7798921050636459714

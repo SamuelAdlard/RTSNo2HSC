@@ -272,7 +272,7 @@ MonoBehaviour:
   objects: []
   lookingForType: builder
   combatMode: 0
-  selectionMode: 0
+  selectionMode: 1
   friendlyMode: 0
   team: 0
 --- !u!135 &4127938447070256924
