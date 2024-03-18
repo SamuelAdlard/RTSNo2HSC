@@ -91,7 +91,7 @@ public class UnitTransporter : Unit
         {
             garrisoned = false;
         }
-
+        
 
         Vector3 spawnPoint = FindSpawnPoint();
 
@@ -102,9 +102,9 @@ public class UnitTransporter : Unit
 
         foreach (Unit unit in garrisonedUnits)
         {
-             unit.gameObject.SetActive(true); 
-             unit.transform.position = spawnPoint;  
-             unit.ClientRpcVisible(true);
+            unit.transform.position = spawnPoint;
+            unit.gameObject.SetActive(true);  
+            unit.ClientRpcVisible(true);
              garrisoned = false;
         }
 
