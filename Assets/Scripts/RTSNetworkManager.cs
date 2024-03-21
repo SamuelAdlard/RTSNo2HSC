@@ -33,6 +33,8 @@ public class RTSNetworkManager : NetworkManager
         player.ClientRpcOnLoad();
         //Adds the player to the players list
         players.Add(player);
+
+        
         
     }
 
