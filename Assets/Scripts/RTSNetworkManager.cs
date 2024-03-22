@@ -2,9 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
+using UnityEngine.SceneManagement;
 
 public class RTSNetworkManager : NetworkManager
 {
+    [Scene][SerializeField] private string menuScene = string.Empty;
+
+    [Header("Room")]
+    [SerializeField] private NetworkRoomPlayerLobby roomPlayerPrefab;
+
+    public static event Action OnClientConnected;
+    public static event Action OnClientDisconnected;
+
+    
+
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
     
@@ -12,8 +24,15 @@ public class RTSNetworkManager : NetworkManager
     //Runs when a player joins the server by overriding the OnServerAddPlayer function
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        //Runs the original function
-        base.OnServerAddPlayer(conn);
+        if (SceneManager.GetActiveScene().name == menuScene)
+        {
+            NetworkRoomPlayerLobby roomPlayerLobby = Instantiate(roomPlayerPrefab);
+
+
+        }
+
+
+
         //Finds the correct player object
         Player player = conn.identity.GetComponent<Player>();
         //Sets the player team
