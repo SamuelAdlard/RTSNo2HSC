@@ -7,41 +7,28 @@ using UnityEngine.SceneManagement;
 
 public class RTSNetworkManager : NetworkManager
 {
-    [Scene][SerializeField] private string menuScene = string.Empty;
 
-    [Header("Room")]
-    [SerializeField] private NetworkRoomPlayerLobby roomPlayerPrefab;
-
-    public static event Action OnClientConnected;
-    public static event Action OnClientDisconnected;
-
-    
 
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
-    
+
     public bool[] teams = new bool[4];
     //Runs when a player joins the server by overriding the OnServerAddPlayer function
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (SceneManager.GetActiveScene().name == menuScene)
-        {
-            NetworkRoomPlayerLobby roomPlayerLobby = Instantiate(roomPlayerPrefab);
 
-
-        }
-
+        base.OnServerAddPlayer(conn);
 
 
         //Finds the correct player object
         Player player = conn.identity.GetComponent<Player>();
         //Sets the player team
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (teams[i] == false)
             {
                 player.team = i;
-                
+
                 teams[i] = true;
                 break;
             }
@@ -53,8 +40,8 @@ public class RTSNetworkManager : NetworkManager
         //Adds the player to the players list
         players.Add(player);
 
-        
-        
+
+
     }
 
     //Handles players disconnecting
@@ -68,6 +55,33 @@ public class RTSNetworkManager : NetworkManager
         players.Remove(player);
         //Frees up space for another player to join the team
         teams[player.team] = false;
-        
+
     }
+
+
+    [Server]
+    public void PlayerReady()
+    {
+
+        foreach (Player player in players)
+        {
+            if (!player.ready)
+            {
+                return;
+            }
+        }
+
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        foreach(Player player in players)
+        {
+            player.ClientRpcStartGame();
+        }
+    }
+
 }
+
+    

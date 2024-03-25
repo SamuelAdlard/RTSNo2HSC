@@ -64,9 +64,10 @@ public class Unit : EntityBase
         
     }
 
-    [Command(requiresAuthority = false)]  //Sends a command to the sever to move the unit.
-    public void CmdMove(Vector3 target, int connectionId)
+    //Moves the Unit
+    public void Move(Vector3 target)
     {
+        
         //TODO: Add something for movement type later
         //TODO: Validate player information here
         if(navMeshAgent.isActiveAndEnabled)

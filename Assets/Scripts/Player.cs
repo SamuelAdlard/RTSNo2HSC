@@ -20,10 +20,13 @@ public class Player : NetworkBehaviour
     public List<Unit> selectedUnits = new List<Unit>();
     //number of builders selected
     public int builders;
+    
 
     [Header("Networking")]
     //The network connection to the player
     public NetworkConnectionToClient networkConnectionToClient;
+    //NetworkManager
+    public RTSNetworkManager networkManager;
 
     [Header("Controls")]
     //Player's camera
@@ -46,6 +49,14 @@ public class Player : NetworkBehaviour
 
 
     [Header("UI")]
+    //If the player is in the lobby
+    public bool inLobby = true  ;
+    //If the player is ready
+    [SyncVar]public bool ready = false;
+    //The UI that is shown if the player is in the lobby
+    public GameObject lobbyUI;
+    //ready button for lobby menu
+    public Button readyButton;
     //The UI building object
     public GameObject BuildingUI;
     //The dropdown for building 
@@ -60,30 +71,28 @@ public class Player : NetworkBehaviour
     public TextMeshProUGUI healthText;
     //Text that shows supply levels
     public TextMeshProUGUI supplyText;
+    
 
     
 
-    [ClientRpc]
-    public void ClientRpcOnLoad() //Runs when the player has joined the server, called by the server
-    {
-        if (isLocalPlayer)
-        {
-            //Gets the camera gameobject when the player joins
-            playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
-            
-        }
-    }
+    
 
     private void Awake()
     {
+        //Finds the network manager object
+        networkManager = GameObject.Find("NetworkManager").GetComponent<RTSNetworkManager>();
+        //Finds the lobby menu
+        lobbyUI = FindInActiveObjectByName("LobbyUI");
+        readyButton = lobbyUI.GetComponentInChildren<Button>();
         //Finds the building menu UI
-        BuildingUI = GameObject.Find("BuildMenu");
+        BuildingUI = FindInActiveObjectByName("BuildMenu");
         //Finds the building dropdown UI
-        buildingDropdown = GameObject.Find("BuildDropdown").GetComponent<TMP_Dropdown>();
+        buildingDropdown = FindInActiveObjectByName("BuildDropdown").GetComponent<TMP_Dropdown>();
         //Finds the startBuilding button
-        startBuildingButton = GameObject.Find("BuildButtonStart").GetComponent<Button>();
+        startBuildingButton = FindInActiveObjectByName("BuildButtonStart").GetComponent<Button>();
         //Sets up listeners for the buttons, so that the following functions will run when the buttons are pressed
         startBuildingButton.onClick.AddListener(() => { BuildButtonPressed(); });
+        readyButton.onClick.AddListener(() => { CmdGetReady(); });
         //Finds the gameobjects for the UI
         infoPanel = FindInActiveObjectByName("Info");
         healthText = FindInActiveObjectByName("HealthText").GetComponent<TextMeshProUGUI>();
@@ -92,11 +101,32 @@ public class Player : NetworkBehaviour
 
     }
 
-    
+    [ClientRpc]
+    public void ClientRpcStartGame()
+    {
+        BuildingUI.SetActive(true);
+    }
+
+    [Command]
+    public void CmdGetReady()
+    {
+        ready = true;
+    }
+
+    [ClientRpc]
+    public void ClientRpcOnLoad() //Runs when the player has joined the server, called by the server
+    {
+        if (isLocalPlayer)
+        {
+            //Gets the camera gameobject when the player joins
+            playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
+
+        }
+    }
 
     private void Update()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || inLobby) return;
         RaycastHit hit = GetRayFromScreen();
        
         ShowEntityInformation(hit);
@@ -181,7 +211,7 @@ public class Player : NetworkBehaviour
                 //Sends a command to the server to move the unit
                 if(unit != null)
                 {
-                    unit.CmdMove(SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count), connectionToServer.connectionId);
+                    CmdMove(SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count), units.IndexOf(unit));
                 }
                 else
                 {
@@ -201,6 +231,13 @@ public class Player : NetworkBehaviour
 
         }
     }
+
+    [Command]
+    private void CmdMove(Vector3 position, int index)
+    {
+        units[index].Move(position);
+    }
+
 
     private Vector3 SoldierPosition(Vector3 hitPosition, int index, int selectedCount)
     {
@@ -251,10 +288,16 @@ public class Player : NetworkBehaviour
     }
 
     [Client]
-    private void DeselectUnit(Unit unit)
+    private void ClientDeselectUnit(Unit unit)
     {
         unit.Deselected(); //Runs the deselected function in the unit class
         selectedUnits.Remove(unit);//Removes the unit from the list 
+    }
+
+    [Command] 
+    private void CmdDeselectUnit(int index)
+    {
+        units.RemoveAt(index);
     }
 
     private void BuildButtonPressed() //Manages the button press depending on whether the player is building or not
@@ -359,6 +402,7 @@ public class Player : NetworkBehaviour
     [Command]
     private void CmdPlaceBuilding(int index, Ray ray)
     {
+        if (inLobby) return;
         RaycastHit hit;
         //Casts the ray created
         Physics.Raycast(ray, out hit);

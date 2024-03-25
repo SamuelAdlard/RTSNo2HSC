@@ -67,7 +67,7 @@ public class CombatUnit : Unit
                 if (Physics.Raycast(turret.position, turret.forward, out hit, range))
                 {
                     
-                    print($"{transform.name}: {hit.transform.name}");
+                    
                     EntityBase entityBase;
                     if (hit.transform.TryGetComponent(out entityBase) && entityBase.team != team)
                     {
