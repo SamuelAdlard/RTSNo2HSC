@@ -191,11 +191,11 @@ public class Player : NetworkBehaviour
         //Checks if the object is a unit and is on the right team
         if (hit.transform.TryGetComponent<Unit>(out currentUnit) && currentUnit.team == team && !currentUnit.selected) //Selects a unit if the player clicks on a non selected unit
         {
-            SelectUnit(currentUnit); //If the unit hasn't been selected yet this adds it to the list
+            ClientSelectUnit(currentUnit); //If the unit hasn't been selected yet this adds it to the list
         }
         else if(currentUnit != null && currentUnit.team == team && currentUnit.selected) //Deselects the unit if the player clicks on a unit that is selected
         {
-            DeselectUnit(currentUnit); //If the unit has already been selected this removes it from the list
+            ClientDeselectUnit(currentUnit); //If the unit has already been selected this removes it from the list
         }
         else
         {
@@ -211,7 +211,9 @@ public class Player : NetworkBehaviour
                 //Sends a command to the server to move the unit
                 if(unit != null)
                 {
-                    CmdMove(SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count), units.IndexOf(unit));
+                    Vector3 target = SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count);
+                    unit.CmdMove(target, netId);
+                    print("Move");
                 }
                 else
                 {
@@ -232,11 +234,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    [Command]
-    private void CmdMove(Vector3 position, int index)
-    {
-        units[index].Move(position);
-    }
+    
 
 
     private Vector3 SoldierPosition(Vector3 hitPosition, int index, int selectedCount)
@@ -281,7 +279,7 @@ public class Player : NetworkBehaviour
     }
 
     [Client] //Selected units are only needed on the client
-    private void SelectUnit(Unit unit) 
+    private void ClientSelectUnit(Unit unit) 
     {
         unit.Selected(); //Runs the selected function in the unit class
         selectedUnits.Add(unit); //Adds the unit to the list of selected units
@@ -294,11 +292,7 @@ public class Player : NetworkBehaviour
         selectedUnits.Remove(unit);//Removes the unit from the list 
     }
 
-    [Command] 
-    private void CmdDeselectUnit(int index)
-    {
-        units.RemoveAt(index);
-    }
+    
 
     private void BuildButtonPressed() //Manages the button press depending on whether the player is building or not
     {

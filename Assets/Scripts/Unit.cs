@@ -65,9 +65,10 @@ public class Unit : EntityBase
     }
 
     //Moves the Unit
-    public void Move(Vector3 target)
+    [Command]
+    public void CmdMove(Vector3 target, uint playerID)
     {
-        
+        if (NetworkServer.spawned[playerID].GetComponent<Player>().team != team) return;   
         //TODO: Add something for movement type later
         //TODO: Validate player information here
         if(navMeshAgent.isActiveAndEnabled)
