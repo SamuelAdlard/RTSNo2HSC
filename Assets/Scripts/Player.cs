@@ -92,7 +92,7 @@ public class Player : NetworkBehaviour
         startBuildingButton = FindInActiveObjectByName("BuildButtonStart").GetComponent<Button>();
         //Sets up listeners for the buttons, so that the following functions will run when the buttons are pressed
         startBuildingButton.onClick.AddListener(() => { BuildButtonPressed(); });
-        readyButton.onClick.AddListener(() => { CmdGetReady(); });
+        readyButton.onClick.AddListener(() => { GetReady(); });
         //Finds the gameobjects for the UI
         infoPanel = FindInActiveObjectByName("Info");
         healthText = FindInActiveObjectByName("HealthText").GetComponent<TextMeshProUGUI>();
@@ -104,13 +104,24 @@ public class Player : NetworkBehaviour
     [ClientRpc]
     public void ClientRpcStartGame()
     {
+        readyButton.gameObject.SetActive(false);
         BuildingUI.SetActive(true);
     }
 
+    public  void GetReady()
+    {
+        if (!isLocalPlayer) return;
+        //readyButton.GetComponentInChildren<Text>().text = "Ready";
+        readyButton.enabled = false;
+        CmdGetReady();
+    }
+
     [Command]
-    public void CmdGetReady()
+    private void CmdGetReady()
     {
         ready = true;
+        networkManager.PlayerReady();
+        print("Client ready");
     }
 
     [ClientRpc]
@@ -212,8 +223,9 @@ public class Player : NetworkBehaviour
                 if(unit != null)
                 {
                     Vector3 target = SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count);
+                    print(connectionToServer.connectionId);
                     unit.CmdMove(target, netId);
-                    print("Move");
+                    
                 }
                 else
                 {

@@ -68,6 +68,7 @@ MonoBehaviour:
   units: []
   selectedUnits: []
   builders: 0
+  networkManager: {fileID: 0}
   playerCamera: {fileID: 0}
   isBuilding: 0
   ghostBuilding: {fileID: 0}
@@ -79,7 +80,10 @@ MonoBehaviour:
   invalid: {fileID: 2100000, guid: bfa42176f0af838498e4f37193d1c979, type: 2}
   valid: {fileID: 2100000, guid: 7fe2dcde72975de45a711026018cb9fa, type: 2}
   selectedBuilding: {fileID: 0}
-  inLobby: 0
+  inLobby: 1
+  ready: 0
+  lobbyUI: {fileID: 0}
+  readyButton: {fileID: 0}
   BuildingUI: {fileID: 0}
   buildingDropdown: {fileID: 0}
   startBuildingButton: {fileID: 0}

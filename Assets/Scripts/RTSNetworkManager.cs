@@ -47,14 +47,15 @@ public class RTSNetworkManager : NetworkManager
     //Handles players disconnecting
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        //Runs the overrided code
-        base.OnServerDisconnect(conn);
+        
         //Finds the player that has disconnected
         Player player = conn.identity.GetComponent<Player>();
         //Removes the player from the list
         players.Remove(player);
         //Frees up space for another player to join the team
         teams[player.team] = false;
+        //Runs the overrided code
+        base.OnServerDisconnect(conn);
 
     }
 
@@ -78,6 +79,8 @@ public class RTSNetworkManager : NetworkManager
     {
         foreach(Player player in players)
         {
+            player.inLobby = false;
+
             player.ClientRpcStartGame();
         }
     }
