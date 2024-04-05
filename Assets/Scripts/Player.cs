@@ -50,7 +50,7 @@ public class Player : NetworkBehaviour
 
     [Header("UI")]
     //If the player is in the lobby
-    public bool inLobby = true  ;
+    [SyncVar]public bool inLobby = true  ;
     //If the player is ready
     [SyncVar]public bool ready = false;
     //The UI that is shown if the player is in the lobby
@@ -106,6 +106,8 @@ public class Player : NetworkBehaviour
     {
         readyButton.gameObject.SetActive(false);
         BuildingUI.SetActive(true);
+        print(netId);
+        //playerCamera.transform.parent.GetComponent<CameraMovement>().enabled = true;
     }
 
     public  void GetReady()
@@ -127,12 +129,9 @@ public class Player : NetworkBehaviour
     [ClientRpc]
     public void ClientRpcOnLoad() //Runs when the player has joined the server, called by the server
     {
-        if (isLocalPlayer)
-        {
-            //Gets the camera gameobject when the player joins
-            playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
-
-        }
+        print(netId);
+        //Gets the camera gameobject when the player joins
+        playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
     }
 
     private void Update()
