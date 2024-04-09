@@ -107,7 +107,8 @@ public class Player : NetworkBehaviour
         readyButton.gameObject.SetActive(false);
         BuildingUI.SetActive(true);
         print(netId);
-        //playerCamera.transform.parent.GetComponent<CameraMovement>().enabled = true;
+        playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
+        playerCamera.GetComponentInParent<CameraMovement>().enabled = true;
     }
 
     public  void GetReady()
@@ -132,6 +133,7 @@ public class Player : NetworkBehaviour
         print(netId);
         //Gets the camera gameobject when the player joins
         playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
+        
     }
 
     private void Update()

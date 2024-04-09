@@ -9,6 +9,7 @@ public class CombatUnit : Unit
     public int damage;
     public int lossRateWhenMoving;
     public int lossRateWhenFighting;
+    public bool hasSupplies;
     public List<Transform> objectsToLook = new List<Transform>();
     public List<Transform> turrets = new List<Transform>();
     public ObjectsInRange attackArea;
@@ -29,16 +30,36 @@ public class CombatUnit : Unit
         if (navMeshAgent.velocity.magnitude > 0.5f  && Time.time > nextLoss)
         {
             nextLoss = Time.time + lossDelay;
-            supplyStores -= lossRateWhenMoving;
+            LoseSupplies(lossRateWhenMoving);
         }
 
-        if (Time.time > nextAttack)
+        if (Time.time > nextAttack && hasSupplies)
         {
             nextAttack = attackDelay + Time.time;
             Attack();
         }
         
         
+    }
+
+
+    public void GetSupplies(int amount)
+    {
+        supplyStores += amount;
+        hasSupplies = true;
+    }
+
+    public void LoseSupplies(int amount)
+    {
+        if((supplyStores - amount) <= 0)
+        {
+            hasSupplies = false;
+            supplyStores = 0;
+        }
+        else
+        {
+            supplyStores -= amount;
+        }
     }
 
     [Server]
@@ -66,14 +87,16 @@ public class CombatUnit : Unit
                 
                 if (Physics.Raycast(turret.position, turret.forward, out hit, range))
                 {
-                    
-                    
+
+                    LoseSupplies(lossRateWhenFighting);
                     EntityBase entityBase;
                     if (hit.transform.TryGetComponent(out entityBase) && entityBase.team != team)
                     {
+                        
                         if (entityBase.TakeDamage(damage) && attackArea.objects.Contains(entityBase))
                         {
                             attackArea.objects.Remove(entityBase);
+                            
                         }
                     }
                 }

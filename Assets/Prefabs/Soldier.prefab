@@ -445,7 +445,8 @@ MonoBehaviour:
   - {fileID: 2692879207798781808}
   damage: 1
   lossRateWhenMoving: 1
-  lossRateWhenFighting: 1
+  lossRateWhenFighting: 3
+  hasSupplies: 1
   objectsToLook:
   - {fileID: 3807474027286648833}
   - {fileID: 2631855213245351087}
