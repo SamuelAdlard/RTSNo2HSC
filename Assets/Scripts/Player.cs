@@ -130,7 +130,6 @@ public class Player : NetworkBehaviour
     [ClientRpc]
     public void ClientRpcOnLoad() //Runs when the player has joined the server, called by the server
     {
-        print(netId);
         //Gets the camera gameobject when the player joins
         playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
         

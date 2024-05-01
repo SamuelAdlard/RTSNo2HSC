@@ -27,7 +27,6 @@ public class UnitTransporter : Unit
         }
         else if(selected && Input.GetKeyDown("g"))
         {
-            print("running");
             CmdUngarrison();
         }
     }

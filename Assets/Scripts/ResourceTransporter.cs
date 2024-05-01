@@ -10,11 +10,12 @@ public class ResourceTransporter : Unit
 
     public GameObject supplyPointUI;
     public float resupplyDistance = 0.5f;
+    public float dropOffRadius = 4.0f;
     bool findingPoint = false;
     int findingPointType = 0;
     Button pickPickup;
     Button pickDropoff;
-
+    Button dropoffForUnits;
 
     private void Update()
     {
@@ -47,8 +48,10 @@ public class ResourceTransporter : Unit
             supplyPointUI = FindInActiveObjectByName("ResourceTransportUI");
             pickPickup = FindInActiveObjectByName("Pickup").GetComponent<Button>();
             pickDropoff = FindInActiveObjectByName("Dropoff").GetComponent<Button>();
+            dropoffForUnits = FindInActiveObjectByName("UnitDropOff").GetComponent<Button>();
             pickPickup.onClick.AddListener(() => { FindPointPressed(0); });
             pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
+            dropoffForUnits.onClick.AddListener(() => { DropOffForUnits(); });
         }
         player.builders++;
         supplyPointUI.SetActive(true);
@@ -165,7 +168,40 @@ public class ResourceTransporter : Unit
 
     public void DropOffForUnits()
     {
+        if(isLocalPlayer && selected)
+        {
+            FindNearbyUnits();
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    private void FindNearbyUnits()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, dropOffRadius);
+        List<CombatUnit> units = new List<CombatUnit>();
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.TryGetComponent(out CombatUnit unit))
+            {
+                if (unit.team == team)
+                {
+                    units.Add(unit);
+                }
+            }
+        }
+
+        SupplyUnits(units);
 
     }
 
+    private void SupplyUnits(List<CombatUnit> units)
+    {
+        foreach (CombatUnit unit in units)
+        {
+            int suppliesToGive = supplyStores / units.Count;
+            unit.supplyStores += suppliesToGive;
+
+        }
+        supplyStores = 0;
+    }
 }
