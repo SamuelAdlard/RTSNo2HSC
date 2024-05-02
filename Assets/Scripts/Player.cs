@@ -106,7 +106,7 @@ public class Player : NetworkBehaviour
     {
         readyButton.gameObject.SetActive(false);
         BuildingUI.SetActive(true);
-        print(netId);
+        
         playerCamera = GameObject.Find("CameraPivot").transform.GetChild(0).GetComponent<Camera>();
         playerCamera.GetComponentInParent<CameraMovement>().enabled = true;
     }

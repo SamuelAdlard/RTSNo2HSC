@@ -168,23 +168,28 @@ public class ResourceTransporter : Unit
 
     public void DropOffForUnits()
     {
-        if(isLocalPlayer && selected)
+        if(selected)
         {
             FindNearbyUnits();
+            //print("Calling command");
         }
     }
 
     [Command(requiresAuthority = false)]
     private void FindNearbyUnits()
     {
+        //print("command running");
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, dropOffRadius);
+        print(hitColliders.Length);
         List<CombatUnit> units = new List<CombatUnit>();
         foreach (Collider collider in hitColliders)
         {
+            //print(collider.name);
             if (collider.TryGetComponent(out CombatUnit unit))
             {
                 if (unit.team == team)
                 {
+                   
                     units.Add(unit);
                 }
             }
@@ -196,9 +201,11 @@ public class ResourceTransporter : Unit
 
     private void SupplyUnits(List<CombatUnit> units)
     {
+        print(units.Count);
         foreach (CombatUnit unit in units)
         {
             int suppliesToGive = supplyStores / units.Count;
+            print(suppliesToGive);
             unit.supplyStores += suppliesToGive;
 
         }
