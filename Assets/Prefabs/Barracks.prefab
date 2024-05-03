@@ -193,7 +193,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   player: {fileID: 0}
-  team: 0
+  team: 1
   teamColours:
   - {fileID: 2100000, guid: 31f42d39a8a43d5409e56f80c2e55951, type: 2}
   - {fileID: 2100000, guid: 4d64b9ae4c2a7294c9cec8273feb8ac5, type: 2}
@@ -216,6 +216,7 @@ MonoBehaviour:
   units:
   - {fileID: 1962653328337454156, guid: a409a6dd19f4aae499fc9b949a3ae71b, type: 3}
   - {fileID: 1913077486436249050, guid: 9be89a13ab2353a4380a0ea5dd1096fd, type: 3}
+  - {fileID: 4112836061684778932, guid: 0952c6ff46effef498ffa30f0e641803, type: 3}
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}

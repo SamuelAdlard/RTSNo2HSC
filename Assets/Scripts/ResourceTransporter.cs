@@ -72,7 +72,7 @@ public class ResourceTransporter : Unit
     [Server]
     private void Resupply()
     {
-        print("resupply");
+        
         navMeshAgent.SetDestination(supplyPoints[0].transform.position);
         if (Vector3.Distance(transform.position, supplyPoints[0].transform.position) < resupplyDistance)
         {
@@ -93,7 +93,7 @@ public class ResourceTransporter : Unit
 
     private void Dropoff()
     {
-        print("dropoff");
+        
         navMeshAgent.SetDestination(supplyPoints[1].transform.position);
         if (Vector3.Distance(transform.position, supplyPoints[1].transform.position) < resupplyDistance)
         {

@@ -245,7 +245,7 @@ MonoBehaviour:
   speed: 5
   selected: 0
   size: 1
-  price: 100
+  price: 15
   timeToMake: 10
   navMeshAgent: {fileID: 2960321786302434096}
   prefab: {fileID: 9112932443032113623}
@@ -258,6 +258,7 @@ MonoBehaviour:
   - {fileID: 0}
   supplyPointUI: {fileID: 0}
   resupplyDistance: 0.75
+  dropOffRadius: 4
 --- !u!195 &2960321786302434096
 NavMeshAgent:
   m_ObjectHideFlags: 0
