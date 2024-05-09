@@ -223,7 +223,7 @@ public class Player : NetworkBehaviour
                 if(unit != null)
                 {
                     Vector3 target = SoldierPosition(hit.point, selectedUnits.IndexOf(unit), selectedUnits.Count);
-                    print(connectionToServer.connectionId);
+                    //print(connectionToServer.connectionId);
                     unit.CmdMove(target, netId);
                     
                 }

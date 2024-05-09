@@ -33,7 +33,18 @@ public class UnitProductionBuilding : Building
             unitProductionUI = FindInActiveObjectByName("UnitProductionMenu");
             unitDropdown = FindInActiveObjectByName("UnitProductionDropdown").GetComponent<TMP_Dropdown>();
             createUnit = FindInActiveObjectByName("MakeUnitButton").GetComponent<Button>();
-            createUnit.onClick.AddListener(() => { CmdAddUnitToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
+            try
+            {
+                createUnit.onClick.AddListener(() => { CmdAddUnitToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
+                print("Called command successfully");
+            }
+            catch (System.Exception ex)
+            {
+                print("Client side: " + ex);
+                
+            }
+            
+            
         }
 
         PopulateDropdown();
@@ -66,16 +77,27 @@ public class UnitProductionBuilding : Building
     [Command(requiresAuthority = false)]
     private void CmdAddUnitToQueue(int index, int team)
     {
-        if (units[index].price <= supplyStores && functional)
+        try
         {
-            if (!hasSpawnPoint)
+            if (units[index].price <= supplyStores && functional)
             {
-                FindSpawnPoint();
+                if (!hasSpawnPoint)
+                {
+                    FindSpawnPoint();
+                }
+                queue.Add(units[index]);
+                supplyStores -= units[index].price;
+                if (!makingUnits) StartCoroutine(MakeUnits());
             }
-            queue.Add(units[index]);
-            supplyStores -= units[index].price;
-            if (!makingUnits) StartCoroutine(MakeUnits());
+            print("Added to queue successfully");
         }
+        catch (System.Exception ex)
+        {
+            print("Failed");
+            print("Server side:" + ex);
+            
+        }
+       
     }
 
     [Server]
