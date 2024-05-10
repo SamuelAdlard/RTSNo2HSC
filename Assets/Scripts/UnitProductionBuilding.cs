@@ -36,10 +36,10 @@ public class UnitProductionBuilding : Building
             createUnit.onClick.AddListener(() => { AddToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
 
 
-            print("Called command successfully");
+           
 
         }
-
+        makingUnitsHere = true;
         PopulateDropdown();
         unitProductionUI.SetActive(true);
 
@@ -50,7 +50,7 @@ public class UnitProductionBuilding : Building
     public override void Deselected()
     {
         base.Deselected();
-
+        makingUnitsHere = false;
         unitProductionUI.SetActive(false);
     }
 
