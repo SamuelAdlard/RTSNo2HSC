@@ -21,7 +21,7 @@ public class UnitProductionBuilding : Building
     Vector3 spawnPoint;
     float nextSpawn;
     bool makingUnits = false;
-   
+    bool makingUnitsHere = false;
 
 
     public override void Selected()
@@ -33,18 +33,11 @@ public class UnitProductionBuilding : Building
             unitProductionUI = FindInActiveObjectByName("UnitProductionMenu");
             unitDropdown = FindInActiveObjectByName("UnitProductionDropdown").GetComponent<TMP_Dropdown>();
             createUnit = FindInActiveObjectByName("MakeUnitButton").GetComponent<Button>();
-            try
-            {
-                createUnit.onClick.AddListener(() => { CmdAddUnitToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
-                print("Called command successfully");
-            }
-            catch (System.Exception ex)
-            {
-                print("Client side: " + ex);
-                
-            }
-            
-            
+            createUnit.onClick.AddListener(() => { AddToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
+
+
+            print("Called command successfully");
+
         }
 
         PopulateDropdown();
@@ -72,6 +65,13 @@ public class UnitProductionBuilding : Building
         unitDropdown.AddOptions(options);
     }
 
+    private void AddToQueue(int index, int team)
+    {
+        if (makingUnitsHere)
+        {
+            CmdAddUnitToQueue(index, team);
+        }
+    }
     
     
     [Command(requiresAuthority = false)]
@@ -93,9 +93,8 @@ public class UnitProductionBuilding : Building
         }
         catch (System.Exception ex)
         {
-            print("Failed");
-            print("Server side:" + ex);
-            
+            print("Server side: " + ex);
+            //print("Units index: " + index);
         }
        
     }
