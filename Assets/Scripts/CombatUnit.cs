@@ -67,8 +67,10 @@ public class CombatUnit : Unit
     {
         //print(transform.name + attackArea.objects.Count);
         RaycastHit hit;
-        if(attackArea.objects.Count > 0)
+        print(attackArea.objects.Count);
+        if (attackArea.objects.Count > 0)
         {
+            
             EntityBase targetEntity = attackArea.objects[0];
             if (targetEntity == null)
             {
