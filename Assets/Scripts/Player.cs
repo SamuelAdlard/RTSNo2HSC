@@ -139,18 +139,19 @@ public class Player : NetworkBehaviour
     {
         if (!isLocalPlayer || inLobby) return;
         RaycastHit hit = GetRayFromScreen();
-       
+        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
         ShowEntityInformation(hit);
         if (hit.transform == null) return;
         //Checks if the player has clicked 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isOverUI)
         {
+            
             //Handles the player input
             ClickHandler(hit);
             
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !isOverUI)
         {
             //Handles the player input
             RightClickHandler(hit);

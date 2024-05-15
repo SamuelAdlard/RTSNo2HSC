@@ -7,7 +7,7 @@ public class PlayerNameInput : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TMP_InputField inputField = null;
-    [SerializeField] private Button continueButton = null;
+    //[SerializeField] private Button continueButton = null;
 
     public string displayName {  get; private set; }
 
