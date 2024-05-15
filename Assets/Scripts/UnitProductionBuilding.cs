@@ -89,11 +89,11 @@ public class UnitProductionBuilding : Building
                 supplyStores -= units[index].price;
                 if (!makingUnits) StartCoroutine(MakeUnits());
             }
-            print("Added to queue successfully");
+            
         }
         catch (System.Exception ex)
         {
-            print("Server side: " + ex);
+            Debug.LogError("Server side: " + ex);
             //print("Units index: " + index);
         }
        

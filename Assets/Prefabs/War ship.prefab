@@ -225,7 +225,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 8
+  m_Radius: 12
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5179855970162541901
 Rigidbody:
@@ -543,7 +543,7 @@ MonoBehaviour:
   damage: 1
   lossRateWhenMoving: 1
   lossRateWhenFighting: 1
-  hasSupplies: 0
+  hasSupplies: 1
   objectsToLook:
   - {fileID: 4883023723995962864}
   - {fileID: 4272241643910641587}

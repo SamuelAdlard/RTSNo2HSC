@@ -409,6 +409,7 @@ MonoBehaviour:
   units:
   - {fileID: 8098785369250849770, guid: 10a3d5ac2d9fa7040b790e729fba0597, type: 3}
   - {fileID: 7494898962527128473, guid: 715ad19e429d72d4d89a3faf14db2730, type: 3}
+  - {fileID: 917901467482738670, guid: e3a1278b5367f904cbd2a3dbc5433be8, type: 3}
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}

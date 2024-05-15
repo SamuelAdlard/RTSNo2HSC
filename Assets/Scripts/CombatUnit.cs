@@ -32,10 +32,11 @@ public class CombatUnit : Unit
             nextLoss = Time.time + lossDelay;
             LoseSupplies(lossRateWhenMoving);
         }
-
+        
         if (Time.time > nextAttack && hasSupplies)
         {
             nextAttack = attackDelay + Time.time;
+            
             Attack();
         }
         
@@ -67,7 +68,7 @@ public class CombatUnit : Unit
     {
         //print(transform.name + attackArea.objects.Count);
         RaycastHit hit;
-        print(attackArea.objects.Count);
+        
         if (attackArea.objects.Count > 0)
         {
             
