@@ -19,10 +19,16 @@ public class ResourceTransporter : Unit
 
     private void Update()
     {
+        
         if (findingPoint)
         {
             FindingPoint();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(transform.position, dropOffRadius);
     }
 
     [ServerCallback]
@@ -171,16 +177,17 @@ public class ResourceTransporter : Unit
         if(selected)
         {
             FindNearbyUnits();
-            //print("Calling command");
+            
         }
     }
 
     [Command(requiresAuthority = false)]
     private void FindNearbyUnits()
     {
-        //print("command running");
+        
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, dropOffRadius);
-        print(hitColliders.Length);
+        if (hitColliders.Length <= 0) return;
+        
         List<CombatUnit> units = new List<CombatUnit>();
         foreach (Collider collider in hitColliders)
         {

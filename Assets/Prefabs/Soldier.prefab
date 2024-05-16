@@ -427,8 +427,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
   type: entity
   health: 10
-  supplyStores: 100
-  maximumCapacity: 100
+  supplyStores: 20
+  maximumCapacity: 20
   damageEffect: {fileID: 2728035917218155499}
   speed: 5
   selected: 0
@@ -444,8 +444,8 @@ MonoBehaviour:
   - {fileID: 1177035552954215753}
   - {fileID: 2692879207798781808}
   damage: 1
-  lossRateWhenMoving: 1
-  lossRateWhenFighting: 3
+  lossRateWhenMoving: 0
+  lossRateWhenFighting: 1
   hasSupplies: 1
   objectsToLook:
   - {fileID: 3807474027286648833}
