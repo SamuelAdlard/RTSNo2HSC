@@ -67,7 +67,7 @@ MonoBehaviour:
   team: 0
   units: []
   selectedUnits: []
-  builders: 0
+  UIbuildings: 0000000000000000
   networkManager: {fileID: 0}
   playerCamera: {fileID: 0}
   isBuilding: 0

@@ -59,7 +59,7 @@ public class ResourceTransporter : Unit
             pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
             dropoffForUnits.onClick.AddListener(() => { DropOffForUnits(); });
         }
-        player.builders++;
+        player.UIbuildings[1]++;
         supplyPointUI.SetActive(true);
 
     }
@@ -67,8 +67,8 @@ public class ResourceTransporter : Unit
     public override void Deselected()
     {
         base.Deselected();
-        player.builders--;
-        if (player.builders <= 0)
+        player.UIbuildings[1]--;
+        if (player.UIbuildings[1] <= 0)
         {
             supplyPointUI.SetActive(false);
         }

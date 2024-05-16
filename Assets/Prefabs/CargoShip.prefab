@@ -5406,7 +5406,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   supplyPointUI: {fileID: 0}
-  resupplyDistance: 0.75
+  resupplyDistance: 1.5
   dropOffRadius: 4
 --- !u!195 &513183897187638666
 NavMeshAgent:

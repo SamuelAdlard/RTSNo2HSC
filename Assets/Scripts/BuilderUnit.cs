@@ -10,6 +10,7 @@ public class BuilderUnit : Unit
     public List<Transform> supplyPoints = new List<Transform>{null, null};
     
     public GameObject builderUI;
+    public GameObject pickUpIndicator;
     public float resupplyDistance = 0.5f;
     bool findingPoint = false;
     int findingPointType = 0;
@@ -23,6 +24,21 @@ public class BuilderUnit : Unit
         {
             FindingPoint();
         }
+
+        //TODO: Fix this later because it is an inefficient way of doing it
+        if (supplyPoints[0] != null && selected)
+        {
+
+            pickUpIndicator.SetActive(true);
+            pickUpIndicator.transform.position = supplyPoints[0].transform.position + new Vector3(0, 1, 0);
+        }
+        else
+        {
+            pickUpIndicator.SetActive(false);
+        }
+        
+
+       
     }
 
     [ServerCallback]
@@ -32,6 +48,8 @@ public class BuilderUnit : Unit
         {
             Resupply();
         }
+
+        
     }
 
 
@@ -41,13 +59,13 @@ public class BuilderUnit : Unit
         base.Selected();
         if (builderUI == null)
         {
-            builderUI = FindInActiveObjectByName("ResourceTransportUI");
-            pickPickup = FindInActiveObjectByName("Pickup").GetComponent<Button>();
-            pickDropoff = FindInActiveObjectByName("Dropoff").GetComponent<Button>();
+            builderUI = FindInActiveObjectByName("BuilderUI");
+            pickPickup = FindInActiveObjectByName("BuilderPickup").GetComponent<Button>();
+            //pickDropoff = FindInActiveObjectByName("Dropoff").GetComponent<Button>();
             pickPickup.onClick.AddListener(() => { FindPointPressed(0); });
-            pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
+            //pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
         }
-        player.builders++;
+        player.UIbuildings[0]++;
         builderUI.SetActive(true);
         
     }
@@ -55,8 +73,8 @@ public class BuilderUnit : Unit
     public override void Deselected()
     {
         base.Deselected();
-        player.builders--;
-        if (player.builders <= 0)
+        player.UIbuildings[0]--;
+        if (player.UIbuildings[0] <= 0)
         {
             builderUI.SetActive(false);
         }
@@ -69,10 +87,17 @@ public class BuilderUnit : Unit
         navMeshAgent.SetDestination(supplyPoints[0].transform.position);
         if(Vector3.Distance(transform.position, supplyPoints[0].transform.position) < resupplyDistance)
         {
-            supplyPoints[0].GetComponent<Building>().supplyStores -= maximumCapacity;
-            supplyStores = maximumCapacity;
-            if (supplyPoints[1] != null) navMeshAgent.SetDestination(supplyPoints[1].position);
-            
+            Building building = supplyPoints[0].GetComponent<Building>();
+            if (building.supplyStores < maximumCapacity)
+            {
+                supplyStores = building.supplyStores;
+                building.supplyStores = 0;
+            }
+            else
+            {
+                building.supplyStores -= maximumCapacity;
+                supplyStores = maximumCapacity;
+            }
         }
     }
 
@@ -80,7 +105,7 @@ public class BuilderUnit : Unit
     {
         if (!selected) return;
         pickPickup.enabled = false;
-        pickDropoff.enabled = false;
+        //pickDropoff.enabled = false;
         findingPoint = true;
         findingPointType = type;
     }
@@ -94,7 +119,7 @@ public class BuilderUnit : Unit
         {
             CmdCheckPickup(ray, player.team, findingPointType);
             pickPickup.enabled = true;
-            pickDropoff.enabled = true;
+            //pickDropoff.enabled = true;
             findingPoint = false;
         }
     }
@@ -104,8 +129,8 @@ public class BuilderUnit : Unit
     {
         RaycastHit hit;
         //Casts the ray created
-        Physics.Raycast(ray, out hit);
-        if (hit.transform.GetComponent<Building>() != null && team == playerTeam)
+        
+        if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<Building>() != null && team == playerTeam)
         {
             supplyPoints[findingPointType] = hit.transform;
         }
