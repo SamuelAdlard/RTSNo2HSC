@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ResourceTransporter : Unit
 {
     public List<Transform> supplyPoints = new List<Transform> { null, null };
-
+    public List<GameObject> pointIndicators = new List<GameObject>();
     public GameObject supplyPointUI;
     public float resupplyDistance = 0.5f;
     public float dropOffRadius = 4.0f;
@@ -23,6 +23,20 @@ public class ResourceTransporter : Unit
         if (findingPoint)
         {
             FindingPoint();
+        }
+
+        for (int i = 0; i < supplyPoints.Count; i++)
+        {
+            if (supplyPoints[i] != null && selected)
+            {
+
+                pointIndicators[i].SetActive(true);
+                pointIndicators[i].transform.position = supplyPoints[i].transform.position + new Vector3(0, 1, 0);
+            }
+            else
+            {
+                pointIndicators[i].SetActive(false);
+            }
         }
     }
 
@@ -145,8 +159,8 @@ public class ResourceTransporter : Unit
     {
         RaycastHit hit;
         //Casts the ray created
-        Physics.Raycast(ray, out hit);
-        if (hit.transform.GetComponent<Building>() != null && team == playerTeam)
+        
+        if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<Building>() != null && team == playerTeam)
         {
             supplyPoints[findingPointType] = hit.transform;
         }
@@ -212,10 +226,20 @@ public class ResourceTransporter : Unit
         foreach (CombatUnit unit in units)
         {
             int suppliesToGive = supplyStores / units.Count;
-            print(suppliesToGive);
-            unit.supplyStores += suppliesToGive;
+            if(suppliesToGive + unit.supplyStores > unit.maximumCapacity)
+            {
+                
+                supplyStores -= (unit.maximumCapacity - unit.supplyStores);
+                unit.supplyStores = unit.maximumCapacity;
+            }
+            else
+            {
+                unit.supplyStores += suppliesToGive;
+                supplyStores -= suppliesToGive;
+            }
+            
 
         }
-        supplyStores = 0;
+        
     }
 }

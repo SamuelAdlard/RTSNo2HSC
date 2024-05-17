@@ -10,7 +10,7 @@ public class BuilderUnit : Unit
     public List<Transform> supplyPoints = new List<Transform>{null, null};
     
     public GameObject builderUI;
-    public GameObject pickUpIndicator;
+    public List<GameObject> pointIndicators = new List<GameObject>();
     public float resupplyDistance = 0.5f;
     bool findingPoint = false;
     int findingPointType = 0;
@@ -26,16 +26,19 @@ public class BuilderUnit : Unit
         }
 
         //TODO: Fix this later because it is an inefficient way of doing it
-        if (supplyPoints[0] != null && selected)
+        for (int i = 0; i < supplyPoints.Count; i++)
         {
-
-            pickUpIndicator.SetActive(true);
-            pickUpIndicator.transform.position = supplyPoints[0].transform.position + new Vector3(0, 1, 0);
+            if (supplyPoints[i] != null && selected)
+            {
+                pointIndicators[i].SetActive(true);
+                pointIndicators[i].transform.position = supplyPoints[i].transform.position + new Vector3(0, 1, 0);
+            }
+            else
+            {
+                pointIndicators[i].SetActive(false);
+            }
         }
-        else
-        {
-            pickUpIndicator.SetActive(false);
-        }
+        
         
 
        

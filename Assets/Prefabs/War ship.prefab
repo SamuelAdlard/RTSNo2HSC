@@ -523,7 +523,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
   type: entity
   health: 10
-  supplyStores: 0
+  supplyStores: 50
   maximumCapacity: 50
   damageEffect: {fileID: 3500679983656606932}
   speed: 5
