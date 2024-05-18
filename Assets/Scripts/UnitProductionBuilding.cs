@@ -10,9 +10,10 @@ public class UnitProductionBuilding : Building
     public List<Unit> units = new List<Unit>();
 
     public List<Unit> queue = new List<Unit>();
-
+    
     public GameObject unitProductionUI;
     public TMP_Dropdown unitDropdown;
+    public TextMeshProUGUI productionIndicator;
     public Button createUnit;
     public string spawnable = "ground";
     public Transform spawnPointBase;
@@ -33,25 +34,28 @@ public class UnitProductionBuilding : Building
             unitProductionUI = FindInActiveObjectByName("UnitProductionMenu");
             unitDropdown = FindInActiveObjectByName("UnitProductionDropdown").GetComponent<TMP_Dropdown>();
             createUnit = FindInActiveObjectByName("MakeUnitButton").GetComponent<Button>();
+            productionIndicator = FindInActiveObjectByName("IndicatorText").GetComponent<TextMeshProUGUI>();
             createUnit.onClick.AddListener(() => { AddToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
 
 
            
 
         }
+
+        
+
         makingUnitsHere = true;
         PopulateDropdown();
         unitProductionUI.SetActive(true);
 
     }
 
-
-
     public override void Deselected()
     {
         base.Deselected();
         makingUnitsHere = false;
         unitProductionUI.SetActive(false);
+        productionIndicator.text = "";
     }
 
     private void PopulateDropdown()
@@ -60,7 +64,7 @@ public class UnitProductionBuilding : Building
         List<string> options = new List<string>();
         foreach (Unit unit in units) 
         {
-            options.Add(unit.name);
+            options.Add($"{unit.name} - {unit.price}");
         }
         unitDropdown.AddOptions(options);
     }
@@ -77,26 +81,35 @@ public class UnitProductionBuilding : Building
     [Command(requiresAuthority = false)]
     private void CmdAddUnitToQueue(int index, int team)
     {
-        try
+        if (units[index].price <= supplyStores && functional)
         {
-            if (units[index].price <= supplyStores && functional)
+            if (!hasSpawnPoint)
             {
-                if (!hasSpawnPoint)
-                {
-                    FindSpawnPoint();
-                }
-                queue.Add(units[index]);
-                supplyStores -= units[index].price;
-                if (!makingUnits) StartCoroutine(MakeUnits());
+                FindSpawnPoint();
             }
-            
+            queue.Add(units[index]);
+            supplyStores -= units[index].price;
+            if (!makingUnits) StartCoroutine(MakeUnits());
+            ClientRPCFeedBack(true, index);
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError("Server side: " + ex);
-            //print("Units index: " + index);
+            ClientRPCFeedBack(false, index);
         }
-       
+        
+    }
+
+    [ClientCallback]
+    private void ClientRPCFeedBack(bool success, int index)
+    {
+        if (success)
+        {
+            productionIndicator.text = $"Added {units[index].name} to the queue.";
+        }
+        else
+        {
+            productionIndicator.text = $"Failed to add {units[index].name} to the queue.";
+        }
     }
 
     [Server]
@@ -106,16 +119,11 @@ public class UnitProductionBuilding : Building
         
         for (int i = 0; i < queue.Count && queue[i] != null; i++ )
         {
-            
             yield return new WaitForSeconds(queue[i].timeToMake);
             Unit newUnit = queue[i];
             newUnit.team = team;
             GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
-            
-            
             NetworkServer.Spawn(unit);
-            
-            
         }
         queue.Clear();
         makingUnits = false;

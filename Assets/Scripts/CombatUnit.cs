@@ -15,6 +15,8 @@ public class CombatUnit : Unit
     public ObjectsInRange attackArea;
     public float attackDelay = 1;
     public float range = 1;
+    public LineRenderer lineRenderer;
+    public float renderTime = 1f;
     float nextAttack;
     float lossDelay = 1;
     float nextLoss;
@@ -90,7 +92,7 @@ public class CombatUnit : Unit
                 
                 if (Physics.Raycast(turret.position, turret.forward, out hit, range))
                 {
-
+                    ClientRPCStartRenderAttack(turrets.IndexOf(turret), hit.point);
                     LoseSupplies(lossRateWhenFighting);
                     EntityBase entityBase;
                     if (hit.transform.TryGetComponent(out entityBase) && entityBase.team != team)
@@ -103,7 +105,26 @@ public class CombatUnit : Unit
                         }
                     }
                 }
+                else
+                {
+                    ClientRPCStartRenderAttack(turrets.IndexOf(turret), turret.transform.forward * range);
+                }
             }
         }
+    }
+
+    [ClientRpc]
+    private void ClientRPCStartRenderAttack(int turretIndex,Vector3 attackPosition)
+    {
+        lineRenderer.SetPosition(0, turrets[turretIndex].position);
+        lineRenderer.SetPosition(1, attackPosition);
+        lineRenderer.enabled = true;
+        StartCoroutine(StopRenderAttack());
+    }
+
+    private IEnumerator StopRenderAttack()
+    {
+        yield return new WaitForSeconds(renderTime);
+        lineRenderer.enabled = false;
     }
 }

@@ -229,12 +229,13 @@ public class ResourceTransporter : Unit
             if(suppliesToGive + unit.supplyStores > unit.maximumCapacity)
             {
                 
+                
                 supplyStores -= (unit.maximumCapacity - unit.supplyStores);
-                unit.supplyStores = unit.maximumCapacity;
+                unit.GetSupplies(unit.maximumCapacity - unit.supplyStores);
             }
             else
             {
-                unit.supplyStores += suppliesToGive;
+                unit.GetSupplies(suppliesToGive);
                 supplyStores -= suppliesToGive;
             }
             
