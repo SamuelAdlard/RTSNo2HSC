@@ -433,7 +433,7 @@ MonoBehaviour:
   speed: 5
   selected: 0
   size: 1
-  price: 10
+  price: 50
   timeToMake: 10
   navMeshAgent: {fileID: 4895210043098883214}
   prefab: {fileID: 2692879207798781808}
@@ -482,7 +482,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7451996777599113182}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.009646206, y: 0.67045957, z: 0.008718133, w: 0.74183214}
   m_LocalPosition: {x: 0, y: 0, z: 0.505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

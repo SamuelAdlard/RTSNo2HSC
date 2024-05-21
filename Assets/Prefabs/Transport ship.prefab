@@ -390,7 +390,7 @@ MonoBehaviour:
   speed: 5
   selected: 0
   size: 2
-  price: 15
+  price: 30
   timeToMake: 10
   navMeshAgent: {fileID: 1131556465162869274}
   prefab: {fileID: 5212252826644091241}

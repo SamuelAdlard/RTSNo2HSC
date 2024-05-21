@@ -25,6 +25,7 @@ public class Unit : EntityBase
     [Header("Navigation Info")]
     //navmeshagent
     public NavMeshAgent navMeshAgent;
+    public Vector3 offset;
 
     [Header("GameObjects")]
     //the visual model of the unit.
@@ -74,7 +75,7 @@ public class Unit : EntityBase
         //TODO: Validate player information here
         if(navMeshAgent.isActiveAndEnabled)
         {
-            navMeshAgent.SetDestination(target);
+            navMeshAgent.SetDestination(target + offset);
         }
         
     }

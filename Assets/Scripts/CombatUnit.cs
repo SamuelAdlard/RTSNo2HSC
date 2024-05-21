@@ -12,6 +12,7 @@ public class CombatUnit : Unit
     public bool hasSupplies;
     public List<Transform> objectsToLook = new List<Transform>();
     public List<Transform> turrets = new List<Transform>();
+    
     public ObjectsInRange attackArea;
     public float attackDelay = 1;
     public float range = 1;
