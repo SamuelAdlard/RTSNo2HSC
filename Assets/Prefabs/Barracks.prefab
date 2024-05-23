@@ -203,7 +203,7 @@ MonoBehaviour:
   health: 250
   supplyStores: 0
   maximumCapacity: 200
-  damageEffect: {fileID: 0}
+  damageEffect: {fileID: 1192610883055252474}
   price: 10
   buildWorkAchieved: 0
   functional: 0
@@ -220,6 +220,7 @@ MonoBehaviour:
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}
+  productionIndicator: {fileID: 0}
   createUnit: {fileID: 0}
   spawnable: ground
   spawnPointBase: {fileID: 3829846897819613383}
@@ -498,6 +499,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7e0ebb7f34a1144589f42d0c73b47c3, type: 3}
+--- !u!198 &1192610883055252474 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6140282587445107684, guid: c7e0ebb7f34a1144589f42d0c73b47c3, type: 3}
+  m_PrefabInstance: {fileID: 5024798085778991134}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4243693449278194251 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9178067252015688277, guid: c7e0ebb7f34a1144589f42d0c73b47c3, type: 3}

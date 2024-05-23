@@ -19,6 +19,7 @@ public class UnitProductionBuilding : Building
     public Transform spawnPointBase;
     public Transform spawnPointFinder;
     bool hasSpawnPoint = false;
+    public Vector3 spawnOffset;
     Vector3 spawnPoint;
     float nextSpawn;
     bool makingUnits = false;
@@ -122,7 +123,7 @@ public class UnitProductionBuilding : Building
             yield return new WaitForSeconds(queue[i].timeToMake);
             Unit newUnit = queue[i];
             newUnit.team = team;
-            GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
+            GameObject unit = Instantiate(newUnit.prefab, spawnPoint + spawnOffset, Quaternion.identity);
             NetworkServer.Spawn(unit);
         }
         queue.Clear();
