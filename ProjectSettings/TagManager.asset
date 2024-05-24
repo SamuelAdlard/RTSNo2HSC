@@ -9,6 +9,7 @@ TagManager:
   - resources
   - beach
   - water
+  - sky
   layers:
   - Default
   - TransparentFX

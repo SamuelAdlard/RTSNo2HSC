@@ -123,7 +123,7 @@ public class UnitProductionBuilding : Building
             yield return new WaitForSeconds(queue[i].timeToMake);
             Unit newUnit = queue[i];
             newUnit.team = team;
-            GameObject unit = Instantiate(newUnit.prefab, spawnPoint + spawnOffset, Quaternion.identity);
+            GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
             NetworkServer.Spawn(unit);
         }
         queue.Clear();
@@ -134,10 +134,14 @@ public class UnitProductionBuilding : Building
     private void FindSpawnPoint()
     {
         RaycastHit hit;
+
         for(int i = 0; i < 360; i++)
         {
-            if (Physics.Raycast(spawnPointFinder.position, Vector3.down, out hit))
+            
+            if (Physics.Raycast(spawnPointFinder.position, -spawnPointFinder.up, out hit))
             {
+                Debug.DrawRay(spawnPointFinder.position, -spawnPointFinder.transform.up * hit.distance, Color.green, 1000);
+                print(hit.transform.tag);
                 if (hit.transform.CompareTag(spawnable))
                 {
                     hasSpawnPoint = true;
@@ -149,6 +153,8 @@ public class UnitProductionBuilding : Building
             spawnPointBase.Rotate(0, i, 0);
         }
     }
+
+    
 
     //code taken from stackoverflow
     GameObject FindInActiveObjectByName(string name)
