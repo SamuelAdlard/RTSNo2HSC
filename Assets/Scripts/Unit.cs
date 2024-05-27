@@ -12,9 +12,10 @@ public class Unit : EntityBase
     [SerializeField] private float speed = 5;
     //True if in the player script's selected list
     public bool selected = false;
+    
     //What the unit can fit inside
     public float size = 1;
-    //TODO: Movement type
+   
 
     [Header("Production")]
     //price of the unit
@@ -26,6 +27,10 @@ public class Unit : EntityBase
     //navmeshagent
     public NavMeshAgent navMeshAgent;
     public Vector3 offset;
+    //The place the unit is moving to
+    Vector3 movementTarget;
+    //TODO: Movement type
+    public bool keepMoving = false;
 
     [Header("GameObjects")]
     //the visual model of the unit.
@@ -43,6 +48,16 @@ public class Unit : EntityBase
         
     }
 
+    public void KeepMoving()
+    {
+        if (keepMoving && navMeshAgent.velocity.magnitude < 1)
+        {
+            
+            Vector3 randomVector = new Vector3(Random.Range(-4, 4), 0, Random.Range(4, 4));
+            navMeshAgent.SetDestination(movementTarget + randomVector);
+            
+        }
+    }
 
 
     //Runs when the player selects the unit
@@ -76,7 +91,9 @@ public class Unit : EntityBase
         if(navMeshAgent.isActiveAndEnabled)
         {
             navMeshAgent.SetDestination(target + offset);
+
         }
+        movementTarget = target + offset;
         
     }
 

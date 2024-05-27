@@ -29,6 +29,8 @@ public class UnitTransporter : Unit
         {
             CmdUngarrison();
         }
+
+        KeepMoving();
     }
 
     private void Awake()
