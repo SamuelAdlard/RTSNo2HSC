@@ -437,6 +437,9 @@ MonoBehaviour:
   timeToMake: 10
   navMeshAgent: {fileID: 4895210043098883214}
   offset: {x: 0, y: 0, z: 0}
+  keepMoving: 0
+  angle: 0
+  radius: 5
   prefab: {fileID: 2692879207798781808}
   selectionIndicator: {fileID: 8154576060526687943}
   visibleGameObjects:

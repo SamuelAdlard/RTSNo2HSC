@@ -31,6 +31,10 @@ public class Unit : EntityBase
     Vector3 movementTarget;
     //TODO: Movement type
     public bool keepMoving = false;
+    //Circle angle
+    public float angle = 0;
+    //Radius of circle
+    public float radius = 5;
 
     [Header("GameObjects")]
     //the visual model of the unit.
@@ -41,21 +45,32 @@ public class Unit : EntityBase
     public List<GameObject> visibleGameObjects = new List<GameObject>();
 
     
-    private void Awake()
+    public void Awake()
     {
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
-        
+        print(gameObject.name);
+        if(keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
+
     }
 
+    
     public void KeepMoving()
     {
-        if (keepMoving && navMeshAgent.velocity.magnitude < 1)
+       
+        float x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+        float y = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+        Debug.DrawRay(movementTarget, new Vector3(x, 0, 0), Color.red, 1);
+        Debug.DrawRay(movementTarget, new Vector3(0, 0, y), Color.blue, 1);
+        Vector3 circlePosition = new Vector3(x , 0, y);
+
+        if(navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(movementTarget + circlePosition);
+ 
+        angle += 10;
+
+        if(angle >= 360)
         {
-            
-            Vector3 randomVector = new Vector3(Random.Range(-4, 4), 0, Random.Range(4, 4));
-            navMeshAgent.SetDestination(movementTarget + randomVector);
-            
+            angle = 0;
         }
     }
 

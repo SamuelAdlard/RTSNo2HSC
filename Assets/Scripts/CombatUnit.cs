@@ -22,7 +22,7 @@ public class CombatUnit : Unit
     float lossDelay = 1;
     float nextLoss;
     
-    private void Awake()
+    private void Start()
     {
         attackArea.team = team;
     }
@@ -43,7 +43,7 @@ public class CombatUnit : Unit
             Attack();
         }
 
-        KeepMoving();
+       
         
     }
 

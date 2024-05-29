@@ -30,11 +30,12 @@ public class UnitTransporter : Unit
             CmdUngarrison();
         }
 
-        KeepMoving();
+        
     }
 
-    private void Awake()
+    void Start()
     {
+        
         range.team = team;
     }
 
