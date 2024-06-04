@@ -11,6 +11,8 @@ public class RTSNetworkManager : NetworkManager
 
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
+    //public List<Transform> spawnLocations = new List<Transform>();
+    public List<Unit> startingUnits = new List<Unit>();
 
     public bool[] teams = new bool[4];
     //Runs when a player joins the server by overriding the OnServerAddPlayer function
@@ -37,11 +39,34 @@ public class RTSNetworkManager : NetworkManager
         player.networkConnectionToClient = conn;
         //Runs the On load player function
         player.ClientRpcOnLoad();
+        //Spawn player
+        print($"Player:{player} Team:{player.team}");
+        SpawnStartingUnits(player);
         //Adds the player to the players list
         players.Add(player);
 
 
 
+    }
+
+    private void SpawnStartingUnits(Player player)
+    {
+        foreach(Unit unit in startingUnits)
+        {
+            try
+            {
+                Unit newUnit = unit;
+                newUnit.team = player.team;
+                GameObject unitGameObject = Instantiate(newUnit.prefab, Vector3.zero, Quaternion.identity);
+                NetworkServer.Spawn(unitGameObject);
+            }
+            catch (Exception ex)
+            {
+                print(ex);
+                throw;
+            }
+            
+        }
     }
 
     //Handles players disconnecting
@@ -82,6 +107,8 @@ public class RTSNetworkManager : NetworkManager
             player.inLobby = false;
 
             player.ClientRpcStartGame();
+            //Spawns the base units 
+            
         }
     }
 

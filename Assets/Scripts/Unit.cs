@@ -35,21 +35,27 @@ public class Unit : EntityBase
     public float angle = 0;
     //Radius of circle
     public float radius = 5;
+    //Last direction the unit was moving in
+    float lastAngle;
 
     [Header("GameObjects")]
-    //the visual model of the unit.
+    //the prefab of the unit.
     public GameObject prefab;
     //the circle that appears when the unit is selected.
     public GameObject selectionIndicator;
     //list of visible objects on the gameobject
     public List<GameObject> visibleGameObjects = new List<GameObject>();
+    //The visible model of the unit.
+    public GameObject model;
 
-    
+    [Server]
     public void Awake()
     {
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
-        print(gameObject.name);
+        Vector3 randomVector = new Vector3(transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1));
+        navMeshAgent.SetDestination(randomVector);
+        //print(gameObject.name);
         if(keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
 
     }
@@ -57,15 +63,26 @@ public class Unit : EntityBase
     
     public void KeepMoving()
     {
-       
-        float x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
-        float y = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-        Debug.DrawRay(movementTarget, new Vector3(x, 0, 0), Color.red, 1);
-        Debug.DrawRay(movementTarget, new Vector3(0, 0, y), Color.blue, 1);
-        Vector3 circlePosition = new Vector3(x , 0, y);
 
-        if(navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(movementTarget + circlePosition);
- 
+        float currentAngle = transform.rotation.eulerAngles.y;
+
+        float currentAngularVelocity = lastAngle - currentAngle; //degrees per second
+
+        if (Vector3.Distance(transform.position, movementTarget) < 7.5f)
+        {
+            float x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+            float y = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+            Vector3 circlePosition = new Vector3(x, 0, y);
+            
+            print($"Current angle: {currentAngle}, Last angle:{lastAngle}");
+            
+            if (navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(movementTarget + circlePosition);
+        }
+
+
+        lastAngle = currentAngle;
+        Vector3 rotation = new Vector3( 0, transform.rotation.eulerAngles.y, currentAngularVelocity);
+        model.transform.rotation = Quaternion.Euler(rotation);
         angle += 10;
 
         if(angle >= 360)
