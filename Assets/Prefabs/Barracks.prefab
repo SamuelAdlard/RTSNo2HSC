@@ -217,6 +217,7 @@ MonoBehaviour:
   - {fileID: 1962653328337454156, guid: a409a6dd19f4aae499fc9b949a3ae71b, type: 3}
   - {fileID: 1913077486436249050, guid: 9be89a13ab2353a4380a0ea5dd1096fd, type: 3}
   - {fileID: 4112836061684778932, guid: 0952c6ff46effef498ffa30f0e641803, type: 3}
+  - {fileID: 1772507006871959945, guid: 01d992d8311ddfa4da05607e5ff1aa0d, type: 3}
   queue: []
   unitProductionUI: {fileID: 0}
   unitDropdown: {fileID: 0}
@@ -225,6 +226,7 @@ MonoBehaviour:
   spawnable: ground
   spawnPointBase: {fileID: 3829846897819613383}
   spawnPointFinder: {fileID: 3771050920527804699}
+  spawnOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &4919555675805804613
 GameObject:
   m_ObjectHideFlags: 0

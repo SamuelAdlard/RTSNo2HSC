@@ -11,7 +11,7 @@ public class RTSNetworkManager : NetworkManager
 
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
-    //public List<Transform> spawnLocations = new List<Transform>();
+    public List<Vector3> spawnLocations = new List<Vector3>();
     public List<Unit> startingUnits = new List<Unit>();
 
     public bool[] teams = new bool[4];
@@ -51,13 +51,16 @@ public class RTSNetworkManager : NetworkManager
 
     private void SpawnStartingUnits(Player player)
     {
+        
         foreach(Unit unit in startingUnits)
         {
+            
             try
             {
                 Unit newUnit = unit;
                 newUnit.team = player.team;
-                GameObject unitGameObject = Instantiate(newUnit.prefab, Vector3.zero, Quaternion.identity);
+                newUnit.supplyStores = newUnit.maximumCapacity;
+                GameObject unitGameObject = Instantiate(newUnit.prefab, spawnLocations[player.team], Quaternion.identity);
                 NetworkServer.Spawn(unitGameObject);
             }
             catch (Exception ex)
@@ -66,6 +69,7 @@ public class RTSNetworkManager : NetworkManager
                 throw;
             }
             
+
         }
     }
 
