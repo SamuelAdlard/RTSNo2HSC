@@ -59,6 +59,7 @@ public class RTSNetworkManager : NetworkManager
             {
                 Unit newUnit = unit;
                 newUnit.team = player.team;
+                newUnit.player = player;
                 newUnit.supplyStores = newUnit.maximumCapacity;
                 GameObject unitGameObject = Instantiate(newUnit.prefab, spawnLocations[player.team], Quaternion.identity);
                 NetworkServer.Spawn(unitGameObject);

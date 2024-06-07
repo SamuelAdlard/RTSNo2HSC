@@ -48,7 +48,7 @@ public class Unit : EntityBase
     //The visible model of the unit.
     public GameObject model;
 
-    [Server]
+    [ServerCallback]
     public void Awake()
     {
         //sets the nav mesh speed to the same as the speed variable.
@@ -57,7 +57,7 @@ public class Unit : EntityBase
         navMeshAgent.SetDestination(randomVector);
         //print(gameObject.name);
         if(keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
-
+        player.units.Add(this);
     }
 
     
@@ -74,7 +74,7 @@ public class Unit : EntityBase
             float y = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
             Vector3 circlePosition = new Vector3(x, 0, y);
             
-            print($"Current angle: {currentAngle}, Last angle:{lastAngle}");
+            
             
             if (navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(movementTarget + circlePosition);
         }
@@ -145,6 +145,13 @@ public class Unit : EntityBase
         //Updates navmesh speed and the displayed speed
         navMeshAgent.speed = newSpeed;
         speed = newSpeed;
+    }
+
+    [Server]
+
+    private void OnDestroy()
+    {
+        player.units.Remove(this);
     }
 
 }

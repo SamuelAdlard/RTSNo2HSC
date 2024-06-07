@@ -417,6 +417,7 @@ public class Player : NetworkBehaviour
         {
             Building newBuilding = buildings[index];
             newBuilding.team = team;
+            newBuilding.player = this;
             GameObject build = Instantiate(newBuilding.prefab, hit.point, Quaternion.identity);
             
             NetworkServer.Spawn(build);

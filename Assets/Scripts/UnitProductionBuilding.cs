@@ -25,7 +25,7 @@ public class UnitProductionBuilding : Building
     bool makingUnits = false;
     bool makingUnitsHere = false;
 
-
+    [Client]
     public override void Selected()
     {
         base.Selected();
@@ -37,14 +37,7 @@ public class UnitProductionBuilding : Building
             createUnit = FindInActiveObjectByName("MakeUnitButton").GetComponent<Button>();
             productionIndicator = FindInActiveObjectByName("IndicatorText").GetComponent<TextMeshProUGUI>();
             createUnit.onClick.AddListener(() => { AddToQueue(unitDropdown.value, team); }); //Runs the function CmdAddUnitToQueue when the button is pressed
-
-
-           
-
         }
-
-        
-
         makingUnitsHere = true;
         PopulateDropdown();
         unitProductionUI.SetActive(true);
@@ -103,14 +96,27 @@ public class UnitProductionBuilding : Building
     [ClientCallback]
     private void ClientRPCFeedBack(bool success, int index)
     {
-        if (success)
+        try
         {
-            productionIndicator.text = $"Added {units[index].name} to the queue.";
+            print(success);
+            print(index);
+            print(units[index].name);
+            print(productionIndicator.text);
+            if (success)
+            {
+                productionIndicator.text = $"Added {units[index].name} to the queue.";
+            }
+            else
+            {
+                productionIndicator.text = $"Failed to add {units[index].name} to the queue.";
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            productionIndicator.text = $"Failed to add {units[index].name} to the queue.";
+            Debug.LogError(ex);
+            throw;
         }
+        
     }
 
     [Server]
@@ -121,10 +127,21 @@ public class UnitProductionBuilding : Building
         for (int i = 0; i < queue.Count && queue[i] != null; i++ )
         {
             yield return new WaitForSeconds(queue[i].timeToMake);
-            Unit newUnit = queue[i];
-            newUnit.team = team;
-            GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
-            NetworkServer.Spawn(unit);
+            
+            try
+            {
+                Unit newUnit = queue[i];
+                //newUnit.player = player;
+                newUnit.team = team;
+                GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
+                NetworkServer.Spawn(unit);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex);
+                throw;
+            }
+            
         }
         queue.Clear();
         makingUnits = false;

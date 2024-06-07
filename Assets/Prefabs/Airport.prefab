@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 1782980996372585368}
   gameObjectsToChange:
-  - {fileID: 0}
+  - {fileID: 2288690692515911828}
   - {fileID: 4675587373111339083}
   - {fileID: 957098789852532366}
 --- !u!23 &2608356967394212731

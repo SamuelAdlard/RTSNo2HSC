@@ -590,7 +590,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   player: {fileID: 0}
-  team: 0
+  team: 1
   teamColours:
   - {fileID: 2100000, guid: 31f42d39a8a43d5409e56f80c2e55951, type: 2}
   - {fileID: 2100000, guid: 4d64b9ae4c2a7294c9cec8273feb8ac5, type: 2}
@@ -598,7 +598,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8e753e2378fd84b47a819236eef71338, type: 2}
   type: builder
   health: 10
-  supplyStores: 0
+  supplyStores: 20
   maximumCapacity: 20
   damageEffect: {fileID: 67931474964879142}
   speed: 5
@@ -607,12 +607,17 @@ MonoBehaviour:
   price: 15
   timeToMake: 10
   navMeshAgent: {fileID: 3693262407983979582}
+  offset: {x: 0, y: 0, z: 0}
+  keepMoving: 0
+  angle: 0
+  radius: 5
   prefab: {fileID: 8101234116943866659}
   selectionIndicator: {fileID: 6595699071159134061}
   visibleGameObjects:
   - {fileID: 8101234116943866659}
   - {fileID: 310222337378796894}
   - {fileID: 6595699071159134061}
+  model: {fileID: 0}
   supplyPoints:
   - {fileID: 0}
   - {fileID: 0}
