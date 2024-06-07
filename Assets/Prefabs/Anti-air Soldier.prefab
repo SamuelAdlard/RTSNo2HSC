@@ -219,7 +219,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: 01d992d8311ddfa4da05607e5ff1aa0d
   hasSpawned: 0
 --- !u!114 &2931565116346749082
 MonoBehaviour:
@@ -360,7 +360,7 @@ MonoBehaviour:
   visibleGameObjects:
   - {fileID: 3053943027516093023}
   - {fileID: 1054067246044624325}
-  - {fileID: 0}
+  - {fileID: 6546858983912302278}
   - {fileID: 2589660329087615267}
   model: {fileID: 0}
   damage: 1

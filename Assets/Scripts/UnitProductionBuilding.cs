@@ -99,9 +99,6 @@ public class UnitProductionBuilding : Building
     {
         try
         {
-            print(success);
-            print(index);
-            print(units[index].name);
             if(productionIndicator == null)
             {
                 print("Indicator text is null");

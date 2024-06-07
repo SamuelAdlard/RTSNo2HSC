@@ -62,7 +62,7 @@ public class Unit : EntityBase
     }
 
     
-    public void KeepMoving()
+    private void KeepMoving()
     {
 
         float currentAngle = transform.rotation.eulerAngles.y;
