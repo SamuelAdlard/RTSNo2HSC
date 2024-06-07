@@ -75,6 +75,7 @@ public class UnitProductionBuilding : Building
     [Command(requiresAuthority = false)]
     private void CmdAddUnitToQueue(int index, int team)
     {
+        NetworkConnection playerConnection = player.GetComponent<NetworkIdentity>().connectionToClient;
         if (units[index].price <= supplyStores && functional)
         {
             if (!hasSpawnPoint)
@@ -84,24 +85,28 @@ public class UnitProductionBuilding : Building
             queue.Add(units[index]);
             supplyStores -= units[index].price;
             if (!makingUnits) StartCoroutine(MakeUnits());
-            ClientRPCFeedBack(true, index);
+            ClientRPCFeedBack(playerConnection ,true, index);
         }
         else
         {
-            ClientRPCFeedBack(false, index);
+            ClientRPCFeedBack(playerConnection,false, index);
         }
         
     }
 
-    [ClientCallback]
-    private void ClientRPCFeedBack(bool success, int index)
+    [TargetRpc]
+    private void ClientRPCFeedBack(NetworkConnection connection,bool success, int index)
     {
         try
         {
             print(success);
             print(index);
             print(units[index].name);
-            print(productionIndicator.text);
+            if(productionIndicator == null)
+            {
+                print("Indicator text is null");
+            }
+
             if (success)
             {
                 productionIndicator.text = $"Added {units[index].name} to the queue.";
@@ -131,7 +136,7 @@ public class UnitProductionBuilding : Building
             try
             {
                 Unit newUnit = queue[i];
-                //newUnit.player = player;
+                newUnit.player = player;
                 newUnit.team = team;
                 GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
                 NetworkServer.Spawn(unit);
@@ -158,7 +163,6 @@ public class UnitProductionBuilding : Building
             if (Physics.Raycast(spawnPointFinder.position, -spawnPointFinder.up, out hit))
             {
                 Debug.DrawRay(spawnPointFinder.position, -spawnPointFinder.transform.up * hit.distance, Color.green, 1000);
-                print(hit.transform.tag);
                 if (hit.transform.CompareTag(spawnable))
                 {
                     hasSpawnPoint = true;
@@ -176,7 +180,7 @@ public class UnitProductionBuilding : Building
     //code taken from stackoverflow
     GameObject FindInActiveObjectByName(string name)
     {
-        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>();
         for (int i = 0; i < objs.Length; i++)
         {
             if (objs[i].hideFlags == HideFlags.None)

@@ -1583,6 +1583,7 @@ MonoBehaviour:
   - {fileID: 5986663383297531759, guid: e3a1278b5367f904cbd2a3dbc5433be8, type: 3}
   - {fileID: 2288690692515911828, guid: f5bc3e1282e129b4ea6e5c1ea5d352da, type: 3}
   - {fileID: 2589660329087615267, guid: 01d992d8311ddfa4da05607e5ff1aa0d, type: 3}
+  - {fileID: 3459694914435246338, guid: a78dbd52e938b184db5bd3d8fce425c7, type: 3}
   players: []
   spawnLocations:
   - {x: 28, y: 1, z: -28}

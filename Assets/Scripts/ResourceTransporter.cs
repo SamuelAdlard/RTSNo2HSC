@@ -40,6 +40,20 @@ public class ResourceTransporter : Unit
         }
     }
 
+    [TargetRpc]
+    private void TargetRpcSupplyPoints(NetworkConnection connection,uint netId, int index, bool isNull)
+    {
+        if (isNull)
+        {
+            supplyPoints[index] = null;
+        }
+        else
+        {
+            supplyPoints[index] = NetworkClient.spawned[netId].transform;
+        }
+        
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(transform.position, dropOffRadius);
@@ -163,10 +177,12 @@ public class ResourceTransporter : Unit
         if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<Building>() != null && team == playerTeam)
         {
             supplyPoints[findingPointType] = hit.transform;
+            TargetRpcSupplyPoints( player.netIdentity.connectionToClient,hit.transform.GetComponent<NetworkIdentity>().netId, findingPointType, false);
         }
         else
         {
             supplyPoints[findingPointType] = null;
+            TargetRpcSupplyPoints( player.netIdentity.connectionToClient, 0, findingPointType, true);
         }
     }
 

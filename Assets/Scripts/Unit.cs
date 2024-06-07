@@ -55,8 +55,9 @@ public class Unit : EntityBase
         navMeshAgent.speed = speed;
         Vector3 randomVector = new Vector3(transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1));
         navMeshAgent.SetDestination(randomVector);
+        movementTarget = transform.position;
         //print(gameObject.name);
-        if(keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
+        if (keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
         player.units.Add(this);
     }
 
@@ -147,8 +148,7 @@ public class Unit : EntityBase
         speed = newSpeed;
     }
 
-    [Server]
-
+    [ServerCallback]
     private void OnDestroy()
     {
         player.units.Remove(this);
