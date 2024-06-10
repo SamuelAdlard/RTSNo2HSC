@@ -6,15 +6,25 @@ using UnityEngine.UI;
 
 public class ResourceTransporter : Unit
 {
+    //The points the unit will take to and from
     public List<Transform> supplyPoints = new List<Transform> { null, null };
+    //Coloured spheres that show where the different points are
     public List<GameObject> pointIndicators = new List<GameObject>();
+    //The UI for selecting supply points
     public GameObject supplyPointUI;
+    //The distance the unit has to be to pick up or drop off resources
     public float resupplyDistance = 0.5f;
+    //The radius in which units will be given supplies
     public float dropOffRadius = 4.0f;
+    //whether the player is looking for a pickup location or not
     bool findingPoint = false;
+    //The type of supply point the player is finding
     int findingPointType = 0;
+    //Pickup button
     Button pickPickup;
+    //Dropoff button
     Button pickDropoff;
+    //The button to give supplies to units
     Button dropoffForUnits;
 
     private void Update()
@@ -22,34 +32,36 @@ public class ResourceTransporter : Unit
         
         if (findingPoint)
         {
-            FindingPoint();
+            FindingPoint(); //runs the finding point function if the player has started looking for a pickup point
         }
 
-        for (int i = 0; i < supplyPoints.Count; i++)
+        for (int i = 0; i < supplyPoints.Count; i++) //Loops through the supplyPoints list an sets up the supply point indicators
         {
-            if (supplyPoints[i] != null && selected)
+            if (supplyPoints[i] != null && selected) //Checks if the supply point exists
             {
-
-                pointIndicators[i].SetActive(true);
-                pointIndicators[i].transform.position = supplyPoints[i].transform.position + new Vector3(0, 1, 0);
+                pointIndicators[i].SetActive(true); //Turns on the indicator for that type of point
+                pointIndicators[i].transform.position = supplyPoints[i].transform.position + new Vector3(0, 1, 0); //Sets the location of the indicator to the supply point
             }
             else
             {
-                pointIndicators[i].SetActive(false);
+                pointIndicators[i].SetActive(false); //Turns the point indicator off if the 
             }
         }
     }
-
+    
+    /// <summary>
+    /// Tells the client where the supply points are. Targets the client that set the supply point
+    /// </summary>
     [TargetRpc]
     private void TargetRpcSupplyPoints(NetworkConnection connection,uint netId, int index, bool isNull)
     {
         if (isNull)
         {
-            supplyPoints[index] = null;
+            supplyPoints[index] = null; //The supply point doesn't exist so this sets the supply point to null on the client
         }
         else
         {
-            supplyPoints[index] = NetworkClient.spawned[netId].transform;
+            supplyPoints[index] = NetworkClient.spawned[netId].transform; //
         }
         
     }
@@ -89,7 +101,6 @@ public class ResourceTransporter : Unit
         }
         player.UIbuildings[1]++;
         supplyPointUI.SetActive(true);
-
     }
 
     public override void Deselected()
