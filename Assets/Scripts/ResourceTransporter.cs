@@ -27,6 +27,9 @@ public class ResourceTransporter : Unit
     //The button to give supplies to units
     Button dropoffForUnits;
 
+    /// <summary>
+    /// Handles player inputs and outputs
+    /// </summary>
     private void Update()
     {
         
@@ -48,10 +51,15 @@ public class ResourceTransporter : Unit
             }
         }
     }
-    
+
     /// <summary>
-    /// Tells the client where the supply points are. Targets the client that set the supply point
+    /// Tells the client the location of supply points so that the client can set the visual indicators.
+    /// Function sets the transform of supplyPoints[index] if the supply point is null on the server, the function will set it to null on the client.
     /// </summary>
+    /// <param name="connection">The client to send to</param>
+    /// <param name="netId">The netId of the supply point</param>
+    /// <param name="index">The index of the supply point in the supply point list</param>
+    /// <param name="isNull">Whether the supply point on the server is null or not</param>
     [TargetRpc]
     private void TargetRpcSupplyPoints(NetworkConnection connection,uint netId, int index, bool isNull)
     {
@@ -61,16 +69,19 @@ public class ResourceTransporter : Unit
         }
         else
         {
-            supplyPoints[index] = NetworkClient.spawned[netId].transform; //
+            supplyPoints[index] = NetworkClient.spawned[netId].transform; //Sets the transform of the supplypoint
         }
         
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(transform.position, dropOffRadius);
+        Gizmos.DrawSphere(transform.position, dropOffRadius); //Draws a gizmo sphere for debugging
     }
 
+    /// <summary>
+    /// Runs on the server on repeat sending the builder back to the supply point if it runs out of supplies
+    /// </summary>
     [ServerCallback]
     private void FixedUpdate()
     {
@@ -99,15 +110,15 @@ public class ResourceTransporter : Unit
             pickDropoff.onClick.AddListener(() => { FindPointPressed(1); });
             dropoffForUnits.onClick.AddListener(() => { DropOffForUnits(); });
         }
-        player.UIbuildings[1]++;
+        player.UIUnits[1]++;
         supplyPointUI.SetActive(true);
     }
 
     public override void Deselected()
     {
         base.Deselected();
-        player.UIbuildings[1]--;
-        if (player.UIbuildings[1] <= 0)
+        player.UIUnits[1]--;
+        if (player.UIUnits[1] <= 0)
         {
             supplyPointUI.SetActive(false);
         }
@@ -197,6 +208,13 @@ public class ResourceTransporter : Unit
         }
     }
 
+
+
+    /// <summary>
+    /// Finds gamobjects by name that are inactive
+    /// </summary>
+    /// <param name="name">The name of the gameobject to find</param>
+    /// <returns></returns>
     GameObject FindInActiveObjectByName(string name)
     {
         Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];

@@ -19,7 +19,7 @@ public class Player : NetworkBehaviour
     //list of all the units the player has selected
     public List<Unit> selectedUnits = new List<Unit>();
     //number of builders selected
-    public List<int> UIbuildings = new List<int>();
+    public List<int> UIUnits = new List<int>();
     
 
     [Header("Networking")]
