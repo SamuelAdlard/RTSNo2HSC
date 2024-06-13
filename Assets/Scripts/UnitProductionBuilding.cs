@@ -7,24 +7,57 @@ using Mirror;
 
 public class UnitProductionBuilding : Building
 {
+    // List to store all units
     public List<Unit> units = new List<Unit>();
 
+    // List to store units that are in the production queue
     public List<Unit> queue = new List<Unit>();
-    
+
+    // Reference to the UI element for unit production
     public GameObject unitProductionUI;
+
+    // Dropdown UI element to select unit types
     public TMP_Dropdown unitDropdown;
+
+    // UI text element to show production status
     public TextMeshProUGUI productionIndicator;
+
+    // Button to create a new unit
     public Button createUnit;
+
+    // String to specify the type of unit to spawn (e.g., "ground" units)
     public string spawnable = "ground";
+
+    // Transform for the base spawn point
     public Transform spawnPointBase;
+
+    // Transform for the finder spawn point
     public Transform spawnPointFinder;
+
+    // Boolean to check if a spawn point has been set
     bool hasSpawnPoint = false;
+
+    // Vector3 to store the offset for the spawn point
     public Vector3 spawnOffset;
+
+    // Vector3 to store the actual spawn point location
     Vector3 spawnPoint;
+
+    // Float to track the next spawn time
     float nextSpawn;
+
+    // Boolean to check if units are being made
     bool makingUnits = false;
+
+    // Boolean to check if units are being made at the current location
     bool makingUnitsHere = false;
 
+
+    /// <summary>
+    /// When the unit is first selected the base unit selected class is run to handle turning on the selection circle and and setting the selection bool to true
+    /// If the UI objects for this unit are null the unit finds the UI elements and sets up the button listeners.
+    /// When the UI has been switched on the function populates a dropdown with all the units that are avaliable in this building
+    /// </summary>
     [Client]
     public override void Selected()
     {
@@ -44,6 +77,9 @@ public class UnitProductionBuilding : Building
 
     }
 
+    /// <summary>
+    /// Turns off the UI for this building
+    /// </summary>
     public override void Deselected()
     {
         base.Deselected();
@@ -52,6 +88,10 @@ public class UnitProductionBuilding : Building
         productionIndicator.text = "";
     }
 
+
+    /// <summary>
+    /// Loops through the list of buildings that are avaliable at this building, and adds their name and price to the drop down list
+    /// </summary>
     private void PopulateDropdown()
     {
         unitDropdown.ClearOptions();
@@ -63,6 +103,11 @@ public class UnitProductionBuilding : Building
         unitDropdown.AddOptions(options);
     }
 
+    /// <summary>
+    /// Adds the unit to the build queue by calling a command on the server.
+    /// </summary>
+    /// <param name="index">The index of the unit type in the avaliable units list</param>
+    /// <param name="team">The team of player that is adding a unit to the queue</param>
     private void AddToQueue(int index, int team)
     {
         if (makingUnitsHere)
@@ -71,7 +116,11 @@ public class UnitProductionBuilding : Building
         }
     }
     
-    
+    /// <summary>
+    /// Adds the unit to the queue to be made if the building has enough supplies. Provides feedback to the player about whether the attempt was successful
+    /// </summary>
+    /// <param name="index">The unit index in the list of avaliable units</param>
+    /// <param name="team">The team of the player trying to spawn a unit</param>
     [Command(requiresAuthority = false)]
     private void CmdAddUnitToQueue(int index, int team)
     {
@@ -94,6 +143,12 @@ public class UnitProductionBuilding : Building
         
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="success"></param>
+    /// <param name="index"></param>
     [TargetRpc]
     private void ClientRPCFeedBack(NetworkConnection connection,bool success, int index)
     {
@@ -149,6 +204,10 @@ public class UnitProductionBuilding : Building
         makingUnits = false;
     }
 
+
+    /// <summary>
+    /// Finds a spawnpoint by rotating a gameobject in a circle path in 360 degrees, at each location a ray is casted down from gameobject to check the location below
+    /// </summary>
     [Server]
     private void FindSpawnPoint()
     {
