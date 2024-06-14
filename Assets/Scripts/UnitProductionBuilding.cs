@@ -134,23 +134,23 @@ public class UnitProductionBuilding : Building
             queue.Add(units[index]);
             supplyStores -= units[index].price;
             if (!makingUnits) StartCoroutine(MakeUnits());
-            ClientRPCFeedBack(playerConnection ,true, index);
+            TargetRPCFeedBack(playerConnection ,true, index);
         }
         else
         {
-            ClientRPCFeedBack(playerConnection,false, index);
+            TargetRPCFeedBack(playerConnection,false, index);
         }
         
     }
 
     /// <summary>
-    /// 
+    /// Function sends a message to the client that tried to add a unit to the building queue and provides feedback to whether or not it was successful 
     /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="success"></param>
-    /// <param name="index"></param>
+    /// <param name="connection">The networkconnection to send the message to</param>
+    /// <param name="success">Bool, indicates whether adding the unit was successful</param>
+    /// <param name="index">The index of the unit in the avaliable units list to provide the name of the unit type being added</param>
     [TargetRpc]
-    private void ClientRPCFeedBack(NetworkConnection connection,bool success, int index)
+    private void TargetRPCFeedBack(NetworkConnection connection,bool success, int index)
     {
         try
         {
@@ -176,6 +176,11 @@ public class UnitProductionBuilding : Building
         
     }
 
+
+    /// <summary>
+    /// Loops through the units in the queue and spawns them after the {timeToMake} number of seconds has past.
+    /// MakingUnits boolean indicates whether the IEnumerator is already running in the for loop so that the function is not called multiple times while it is still spawning units.
+    /// </summary>
     [Server]
     private IEnumerator MakeUnits()
     {

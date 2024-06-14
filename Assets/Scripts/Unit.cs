@@ -54,7 +54,7 @@ public class Unit : EntityBase
         //sets the nav mesh speed to the same as the speed variable.
         navMeshAgent.speed = speed;
         Vector3 randomVector = new Vector3(transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1), transform.position.x + Random.Range(-1, 1));
-        navMeshAgent.SetDestination(randomVector);
+        //navMeshAgent.SetDestination(randomVector);
         movementTarget = transform.position;
         //print(gameObject.name);
         if (keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);

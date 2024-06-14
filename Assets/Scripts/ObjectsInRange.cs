@@ -13,6 +13,11 @@ public class ObjectsInRange : MonoBehaviour
     public bool friendlyMode = false;
     public int team;
 
+    /// <summary>
+    /// Adds certain gameobjects to the objects list based on the conditions selected combat mode adds enemies, 
+    /// selection mode adds a particular type of unit, friendly mode adds units on the same team.
+    /// </summary>
+    /// <param name="other"></param>
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
@@ -35,7 +40,10 @@ public class ObjectsInRange : MonoBehaviour
         }
     }
 
-    
+    /// <summary>
+    /// Removes objects from the list when they exit the collider
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (objects.Contains(other.gameObject.GetComponent<EntityBase>()))
