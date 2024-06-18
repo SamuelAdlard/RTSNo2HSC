@@ -11,7 +11,9 @@ public class RTSNetworkManager : NetworkManager
 
     //List to keep track of the players on the server
     public List<Player> players = new List<Player>();
+    //The locations that the different players' units will be spawned at.
     public List<Vector3> spawnLocations = new List<Vector3>();
+    //The units that are spawned at the start of the game
     public List<Unit> startingUnits = new List<Unit>();
 
     public bool[] teams = new bool[4];
@@ -49,14 +51,19 @@ public class RTSNetworkManager : NetworkManager
 
     }
 
+    /// <summary>
+    /// Loops through the list of starting units and spawns them with the correct player information
+    /// </summary>
+    /// <param name="player">The player that has just joined the game</param>
     private void SpawnStartingUnits(Player player)
     {
-        
+        //Loops through the units
         foreach(Unit unit in startingUnits)
         {
             
             try
             {
+                //creates a new instance of the unit class
                 Unit newUnit = unit;
                 newUnit.team = player.team;
                 newUnit.player = player;
@@ -90,6 +97,9 @@ public class RTSNetworkManager : NetworkManager
     }
 
 
+    /// <summary>
+    /// Checks if all the players are ready and starts the game. If not all the players are ready the game won't start, this is run by the server when any player presses the ready button.
+    /// </summary>
     [Server]
     public void PlayerReady()
     {
@@ -105,6 +115,10 @@ public class RTSNetworkManager : NetworkManager
         StartGame();
     }
 
+
+    /// <summary>
+    ///Loops through all of the players and puts them into the game, allowing them to interact with units and place buildings.
+    /// </summary>
     private void StartGame()
     {
         foreach(Player player in players)
@@ -112,7 +126,7 @@ public class RTSNetworkManager : NetworkManager
             player.inLobby = false;
 
             player.ClientRpcStartGame();
-            //Spawns the base units 
+            //Spawn the starting units here later
             
         }
     }

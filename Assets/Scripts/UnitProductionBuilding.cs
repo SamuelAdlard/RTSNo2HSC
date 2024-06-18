@@ -238,7 +238,11 @@ public class UnitProductionBuilding : Building
 
     
 
-    //code taken from stackoverflow
+    /// <summary>
+    /// Searchs for objects that aren't active with the name {name}
+    /// </summary>
+    /// <param name="name">The name of the object the function will look for and return</param>
+    /// <returns>Returns a gameobject with the name of name</returns>
     GameObject FindInActiveObjectByName(string name)
     {
         Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>();
