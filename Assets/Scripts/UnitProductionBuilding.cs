@@ -197,6 +197,7 @@ public class UnitProductionBuilding : Building
                 newUnit.team = team;
                 GameObject unit = Instantiate(newUnit.prefab, spawnPoint, Quaternion.identity);
                 NetworkServer.Spawn(unit);
+                unit.GetComponent<Unit>().ClientRpcTurnOffNavmeshAgent();
             }
             catch (System.Exception ex)
             {

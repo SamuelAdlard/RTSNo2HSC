@@ -24,11 +24,21 @@ public class EntityBase : NetworkBehaviour
     //The effect that appears when the entity is attacked
     public ParticleSystem damageEffect;
 
+    /// <summary>
+    /// Tells the unit which player owns it
+    /// </summary>
+    [ClientCallback]
     private void Start()
     {
-        StartCoroutine(SetPlayerReference());
+        StartCoroutine(SetPlayerReference()); //TODO: Make a better system where the server tells the player which player is correct
     }
 
+    /// <summary>
+    /// Runs on the server when the unit takes damage.
+    /// Subtracts the damage variable from the health of the unit and destroys the unit if the health goes below zero
+    /// </summary>
+    /// <param name="damage">The amount of health to be deducted</param>
+    /// <returns>Returns true if the unit dies and false if the unit is still alive</returns>
     [Server]
     public bool TakeDamage(int damage)
     {
@@ -46,6 +56,9 @@ public class EntityBase : NetworkBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Runs when the entity takes damage and shows the damage particles on all clients
+    /// </summary>
     [ClientRpc]
     private void ClientRpcShowEffect()
     {
@@ -55,7 +68,13 @@ public class EntityBase : NetworkBehaviour
         }
     }
 
-    private IEnumerator SetPlayerReference()
+    /// <summary>
+    /// Runs when the entity spawns in after a 0.5 second delay to allow time for the server to spawn in the local player.
+    /// The colour of the unit will change to the correct team colour after this function runs
+    /// </summary>
+    /// <returns></returns>
+    [Client]
+    private IEnumerator SetPlayerReference() //TODO: Use an rpc or something like that to improve this because this is bad :(
     {
         yield return new WaitForSeconds(0.5f);
         Player localPlayer = NetworkClient.localPlayer.GetComponent<Player>();

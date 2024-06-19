@@ -70,6 +70,7 @@ public class RTSNetworkManager : NetworkManager
                 newUnit.supplyStores = newUnit.maximumCapacity;
                 GameObject unitGameObject = Instantiate(newUnit.prefab, spawnLocations[player.team], Quaternion.identity);
                 NetworkServer.Spawn(unitGameObject);
+                unitGameObject.GetComponent<Unit>().ClientRpcTurnOffNavmeshAgent();
             }
             catch (Exception ex)
             {

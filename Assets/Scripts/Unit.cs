@@ -59,9 +59,26 @@ public class Unit : EntityBase
         //print(gameObject.name);
         if (keepMoving) InvokeRepeating("KeepMoving", 0, 0.1f);
         player.units.Add(this);
+        
     }
 
+
+    /// <summary>
+    /// Turns of the clients' navmeshagents to stop visual bugs on the client side
+    /// </summary>
+    [ClientRpc]
+    public void ClientRpcTurnOffNavmeshAgent()
+    {
+        if (!isServer)
+        {
+            navMeshAgent.enabled = false;
+        }
+    }
     
+    /// <summary>
+    /// This function will keep the unit from remaining in one location once it is close enough to the movement target
+    /// The function runs on invoke and will move the unit in a circle pattern each time the function runs
+    /// </summary>
     private void KeepMoving()
     {
 
@@ -130,6 +147,11 @@ public class Unit : EntityBase
         
     }
 
+
+    /// <summary>
+    /// Loops through the unit list of visible objects and makes them visible to the client
+    /// </summary>
+    /// <param name="visible"></param>
     [ClientRpc]
     public void ClientRpcVisible(bool visible)
     {
@@ -151,7 +173,7 @@ public class Unit : EntityBase
     [ServerCallback]
     private void OnDestroy()
     {
-        player.units.Remove(this);
+        player.units.Remove(this); //Removes the unit from the player list of units when destroyed
     }
 
 }

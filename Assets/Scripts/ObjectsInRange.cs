@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class ObjectsInRange : MonoBehaviour
 {
+    //Objects in range that passed the conditions
     public List<EntityBase> objects = new List<EntityBase>();
+    //Conditions for which objects are allowed to be selected
     public string lookingForType = "entity";
     public bool combatMode = false;
     public bool selectionMode = false;

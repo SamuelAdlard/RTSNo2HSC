@@ -120,7 +120,7 @@ public class Player : NetworkBehaviour
     /// <summary>
     /// Function called by button to allow the player to get ready to play the game, lets the server know that the player is ready to player the game
     /// </summary>
-    public  void GetReady()
+    public void GetReady()
     {
         if (!isLocalPlayer) return; //Only runs function on the local player to prevent the function from running multiple times
         //readyButton.GetComponentInChildren<Text>().text = "Ready"; (feature that may be added later)
